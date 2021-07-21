@@ -3,7 +3,7 @@ import React from 'react';
 const LinksPage = () => {
     return (
         <div>
-            <h1>Links Page</h1>
+            <h4>Links Page</h4>
         </div>
     );
 }

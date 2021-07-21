@@ -1,4 +1,4 @@
-.dialogs {
+/*.dialogs {
     display: grid;
     grid-template-columns: 2fr 10fr;
 }
@@ -12,11 +12,17 @@
     color: gold;
 }
 
+
+*/
+
 .messages {
-    padding: 10px;
+    padding: 20px;
 }
 
 .messages .message {
     color: white;
 }
 
+.messageTextArea {
+    padding-top: 310px;
+}

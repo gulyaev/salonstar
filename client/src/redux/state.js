@@ -4,12 +4,12 @@ let state = {
         { id: 2, message: 'It is my first post', likesCount: 35 }
       ],
     dialogsData: [
-        { id: 1, name: 'John' },
-        { id: 2, name: 'Pall' },
-        { id: 3, name: 'Jeff' },
-        { id: 4, name: 'Mike' },
-        { id: 5, name: 'Alex' },
-        { id: 6, name: 'Den' },
+        { id: 1, name: 'John', image: "../../images/ava1.jpeg"},
+        { id: 2, name: 'Pall', image: "../../images/ava2.jpeg"},
+        { id: 3, name: 'Jeff', image: "../../images/ava3.png"},
+        { id: 4, name: 'Mike', image: "../../images/ava4.jpeg"},
+        { id: 5, name: 'Alex', image: "../../images/ava5.jpeg"},
+        { id: 6, name: 'Den', image: "../../images/ava6.jpeg"}
       ],
       messagesData: [
         { id: 1, name: 'John', message: 'Hi' },

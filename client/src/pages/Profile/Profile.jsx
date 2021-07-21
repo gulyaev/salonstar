@@ -5,6 +5,7 @@ import MyPosts from "./MyPosts/MyPosts";
 const Profile = (props) => {
     return (
         <>
+            
             <ProfileInfo />
             <MyPosts state={props.state}/>
         </>
