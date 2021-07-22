@@ -11,15 +11,19 @@ const App = (props) => {
         {//<!-- Navbar goes here -->
         }
         <nav>
-          <div class="nav-wrapper teal lighten-2">
-            <a href="#!" class="brand-logo"><i class="material-icons">cloud</i>Logo</a>
-            <ul class="right hide-on-med-and-down">
-              <li><a href="sass.html"><i class="material-icons">search</i></a></li>
-              <li><a href="badges.html"><i class="material-icons">view_module</i></a></li>
-              <li><a href="collapsible.html"><i class="material-icons">refresh</i></a></li>
-              <li><a href="mobile.html"><i class="material-icons">more_vert</i></a></li>
-            </ul>
+          <div class="row teal lighten-2">
+            <div class="nav-wrapper teal lighten-2" >
+              <a href="#!" class="brand-logo col l2 offset-m2 "><i class="material-icons offset-s2">fingerprint</i>Logo</a>
+              <ul class="right hide-on-med-and-down">
+                <li><a href="sass.html"><i class="material-icons">search</i></a></li>
+                <li><a href="badges.html"><i class="material-icons">view_module</i></a></li>
+                <li><a href="collapsible.html"><i class="material-icons">refresh</i></a></li>
+                <li><a href="mobile.html"><i class="material-icons">more_vert</i></a></li>
+                <li><NavLink to="/isauth" className="amber accent-4 waves-effect waves-light btn black-text"> Войти  <i class="material-icons right">keyboard_tab</i></NavLink></li>
+              </ul>
+            </div>
           </div>
+
         </nav>
 
 
@@ -35,7 +39,6 @@ const App = (props) => {
               <div><NavLink to="/detail/:id" className="collection-item">Посмотреть ссылки</NavLink></div>
               <div><NavLink to="/profile" className="collection-item">Профиль</NavLink></div>
               <div><NavLink to="/dialogs" className="collection-item">Сообщения</NavLink></div>
-              <div><NavLink to="/isauth" className="collection-item">Вход</NavLink></div>
             </div>
           </div>
 

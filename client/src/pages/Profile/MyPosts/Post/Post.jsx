@@ -39,7 +39,7 @@ function Post(props) {
             <ListItemAvatar>
               <Avatar
                 alt={`Avatar n°${ + 1}`}
-                src={`/static/images/avatar/${ + 1}.jpg`}
+                src={"../../images/avamain.jpeg"}
               />
             </ListItemAvatar>
             <ListItemText primary={ props.message } />

@@ -22,7 +22,7 @@ export const useRoutes = (isAuthenticated, props) => {
                     <DetailPage/>
                 </Route>
                 <Route path="/profile">
-                    <Profile state={props.state}/>
+                    <Profile state={props.state} addPost={props.addPost} newPostText={props.state.newPostText} onPostChange={props.onPostChange}/>
                 </Route>
                 <Route path="/dialogs">
                     <Dialogs state={props.state}/>
