@@ -1,8 +1,11 @@
-export let store = {
-  _callSubscriber () {
-    console.log('state is changed - state изменен');
-  },
+import { STATES } from "mongoose";
 
+const ADD_POST = 'ADD-POST';
+const ON_POST_CHANGE = 'ON-POST-CHANGE';
+const ADD_MESSAGE = 'ADD-MESSAGE';
+const ON_MESSAGE_CHANGE = 'ON-MESSAGE-CHANGE';
+
+export let store = {
   _state: {
     postData: [
       { id: 1, message: 'Hi! How are you?', likesCount: 18 },
@@ -23,35 +26,57 @@ export let store = {
       { id: 3, name: 'Jeff', message: 'Yo!' },
       { id: 4, name: 'Mike', message: 'Yo!' },
       { id: 5, name: 'Alex', message: 'Yo!' }
-    ]
+    ],
+    newMessageText: '',
   },
 
-  getState () {
+  _callSubscriber() {
+    console.log('state is changed - state изменен');
+    //alert('state is changed'+state);
+  },
+
+  getState() {
     return this._state;
   },
 
-  addPost() {//в параметр передаем наш новый текст
-    let newPost = {//формируем объект по образу и подобию объекта postsData
-      id: 3,
-      message: this._state.newPostText,
-      likesCount: 53
-    };
-
-    this._state.postData.push(newPost);//добавляем новый объект в наш массив
-    this._state.newPostText = '';
-    this._callSubscriber(this._state);
-  },
-
-  onPostChange(newPostTex) {
-    this._state.newPostText = newPostTex;
-    this._callSubscriber(this._state);
-  },
-
-  //rerenderEntireTree(state),
-
-  subscribe (observer) {
+  subscribe(observer) {
     this._callSubscriber = observer;
+  },
+
+  dispath (action) {
+    if (action.type === ADD_POST && this._state.newPostText!='') {
+      let newPost = {
+          id: 3,
+          message: this._state.newPostText,
+          likesCount: 53
+      };
+      this._state.postData.push(newPost);
+      this._state.newPostText = '';
+      this._callSubscriber(this._state);
+  } else if (action.type === ON_POST_CHANGE) {
+    this._state.newPostText = action.newText;
+    this._callSubscriber(this._state);
+  } else if (action.type === ADD_MESSAGE && this._state.newMessageText!='') {
+      let newMessage = {
+        id: 6,
+        name: 'Lev Letto',
+        message: this._state.newMessageText,
+      };
+      this._state.messagesData.push(newMessage);
+      this._state.newMessageText = '';
+      this._callSubscriber(this._state);
+    } else if (action.type === ON_MESSAGE_CHANGE) {
+      this._state.newMessageText = action.newText;
+      this._callSubscriber(this._state);
+    }
+    this._callSubscriber(this._state);
   }
 }
 
+export const addPostActionCreator = () => ({ type: 'ADD-POST' });
+export const onPostChangeActionCreator = (text) => ({ type: 'ON-POST-CHANGE', newText: text });
+export const addMessageActionCreator = () => ({ type: 'ADD-MESSAGE' });
+export const onMessageChangeActionCreator = (text) => ({ type: 'ON-MESSAGE-CHANGE', newText: text });
+
 export default store;
+window.store = store;

@@ -7,6 +7,7 @@ import AuthPage from '../src/pages/AuthPage';
 import Profile from './pages/Profile/Profile';
 import Dialogs from './pages/Dialogs/Dialogs';
 import IsAuth from './pages/IsAuth';
+import Vacancies from './pages/Vacancies';
 
 export const useRoutes = (isAuthenticated, props) => {
     if (isAuthenticated) {
@@ -22,13 +23,16 @@ export const useRoutes = (isAuthenticated, props) => {
                     <DetailPage/>
                 </Route>
                 <Route path="/profile">
-                    <Profile state={props.state} addPost={props.addPost} newPostText={props.state.newPostText} onPostChange={props.onPostChange}/>
+                    <Profile state={props.state}  dispatch={props.dispatch} addPost={props.addPost} newPostText={props.state.newPostText} onPostChange={props.onPostChange}/>
                 </Route>
                 <Route path="/dialogs">
-                    <Dialogs state={props.state}/>
+                    <Dialogs state={props.state} dispatch={props.dispatch} newMessageText={props.state.newMessageText}/>
                 </Route>
                 <Route path="/isauth">
                     <IsAuth/>
+                </Route>
+                <Route path="/vacancies">
+                    <Vacancies/>
                 </Route>
                 <Redirect to='/create'/>
             </Switch>

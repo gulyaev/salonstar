@@ -1,22 +1,23 @@
 import React from 'react';
 import s from './MyPosts.module.css';
 import Post from './Post/Post';
+import { addPostActionCreator, onPostChangeActionCreator } from '../../../redux/state';
 
 const MyPosts = (props) => {
-    debugger;
     let postsElements = props.state.postData.map(post => (<Post message={post.message} likesCount={post.likesCount} />));
-
-    let addPost = () => {
-        props.addPost();
-    }
 
     let newPostElement = React.createRef();
 
-    let onPostChange=()=>{
-        let text = newPostElement.current.value;
-        props.onPostChange(text);
+    let addPost = () => {
+        props.dispatch(addPostActionCreator());
+        newPostElement.current.value='';
     }
-    
+
+    let onPostChange = () => {
+        let text = newPostElement.current.value;
+        props.dispatch(onPostChangeActionCreator(text));
+    }
+
 
     return (
         <div className={s.postsBlock}>
@@ -35,7 +36,7 @@ const MyPosts = (props) => {
                     </div>
                 </div>
                 <div>
-                <a class="waves-effect waves-light btn" onClick={addPost}>Опубликовать на стене</a>
+                    <a class="waves-effect waves-light btn" onClick={addPost}>Опубликовать на стене</a>
                 </div>
             </div>
             <div className={s.posts}>
