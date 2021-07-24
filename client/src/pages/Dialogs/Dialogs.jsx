@@ -5,8 +5,8 @@ import Message from "./Message/Message";
 import { addMessageActionCreator, onMessageChangeActionCreator } from '../../redux/state';
 
 const Dialogs = (props) => {
-    let dialogsElements = props.state.dialogsData.map(dialog => (<DialogItem name={dialog.name} id={dialog.id} image={dialog.image}/>));
-    let messagesElements = props.state.messagesData.map(message => (<Message name={message.name} message={message.message} id={message.id} />));
+    let dialogsElements = props.state.dialogsPage.dialogsData.map(dialog => (<DialogItem name={dialog.name} id={dialog.id} image={dialog.image}/>));
+    let messagesElements = props.state.dialogsPage.messagesData.map(message => (<Message name={message.name} message={message.message} id={message.id} />));
 
     let addMessage = () => {
         props.dispatch(addMessageActionCreator());

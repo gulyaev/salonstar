@@ -4,7 +4,7 @@ import Post from './Post/Post';
 import { addPostActionCreator, onPostChangeActionCreator } from '../../../redux/state';
 
 const MyPosts = (props) => {
-    let postsElements = props.state.postData.map(post => (<Post message={post.message} likesCount={post.likesCount} />));
+    let postsElements = props.state.profilePage.postData.map(post => (<Post message={post.message} likesCount={post.likesCount} />));
 
     let newPostElement = React.createRef();
 

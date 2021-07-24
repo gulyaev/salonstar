@@ -8,6 +8,7 @@ import Profile from './pages/Profile/Profile';
 import Dialogs from './pages/Dialogs/Dialogs';
 import IsAuth from './pages/IsAuth';
 import Vacancies from './pages/Vacancies';
+import Courses from './pages/Courses';
 
 export const useRoutes = (isAuthenticated, props) => {
     if (isAuthenticated) {
@@ -33,6 +34,9 @@ export const useRoutes = (isAuthenticated, props) => {
                 </Route>
                 <Route path="/vacancies">
                     <Vacancies/>
+                </Route>
+                <Route path="/courses">
+                    <Courses/>
                 </Route>
                 <Redirect to='/create'/>
             </Switch>
