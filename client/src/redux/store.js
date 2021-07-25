@@ -8,7 +8,7 @@ export let store = {
         { id: 1, message: 'Hi! How are you?', likesCount: 18 },
         { id: 2, message: 'It is my first post', likesCount: 35 }
       ],
-      newPostText: '',
+      newPostText: 'f',
     },
 
     dialogsPage: {
@@ -44,7 +44,7 @@ export let store = {
     this._callSubscriber = observer;
   },
 
-  dispath(action) {
+  dispatсh(action) {
     this._state.profilePage = profileReducer(this._state.profilePage, action);
     this._state.dialogsPage = dialogsReducer(this._state.dialogsPage, action);
 

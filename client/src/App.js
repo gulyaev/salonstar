@@ -15,7 +15,7 @@ const App = (props) => {
     //elems.dropdown();
     M.Dropdown.init(elems, { inDuration: 300, outDuration: 225 });
   });
-
+//debugger;
   return (
     <Router>
       <div className={"container"}>

@@ -9,6 +9,7 @@ import Dialogs from './pages/Dialogs/Dialogs';
 import IsAuth from './pages/IsAuth';
 import Vacancies from './pages/Vacancies';
 import Courses from './pages/Courses';
+import DialogsContainer from './pages/Dialogs/DialogsContainer';
 
 export const useRoutes = (isAuthenticated, props) => {
     if (isAuthenticated) {
@@ -24,10 +25,10 @@ export const useRoutes = (isAuthenticated, props) => {
                     <DetailPage/>
                 </Route>
                 <Route path="/profile">
-                    <Profile state={props.state}  dispatch={props.dispatch} addPost={props.addPost} newPostText={props.state.newPostText} onPostChange={props.onPostChange}/>
+                    <Profile state={props.state}  dispatch={props.dispatch} newPostText={props.state.newPostText} postsData={props.state.profilePage.postsData}/>
                 </Route>
                 <Route path="/dialogs">
-                    <Dialogs state={props.state} dispatch={props.dispatch} newMessageText={props.state.newMessageText}/>
+                    <DialogsContainer state={props.state} dispatch={props.dispatch} newMessageText={props.state.newMessageText} dialogsData={props.state.dialogsPage.dialogsData} messagesData={props.state.dialogsPage.messagesData}/>
                 </Route>
                 <Route path="/isauth">
                     <IsAuth/>

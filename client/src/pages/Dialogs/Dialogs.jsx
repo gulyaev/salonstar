@@ -2,24 +2,24 @@ import React from 'react';
 import s from './Dialogs.module.css';
 import DialogItem from "./DialogItem/DialogItem";
 import Message from "./Message/Message";
-import { addMessageActionCreator, onMessageChangeActionCreator } from '../../redux/state';
+import { addMessageActionCreator, onMessageChangeActionCreator } from '../../redux/store';
 
 const Dialogs = (props) => {
     let dialogsElements = props.state.dialogsPage.dialogsData.map(dialog => (<DialogItem name={dialog.name} id={dialog.id} image={dialog.image}/>));
     let messagesElements = props.state.dialogsPage.messagesData.map(message => (<Message name={message.name} message={message.message} id={message.id} />));
 
+    let newMessageElement = React.createRef();
+
     let addMessage = () => {
-        props.dispatch(addMessageActionCreator());
+        props.addMessage();
         newMessageElement.current.value='';
     }
 
-    let newMessageElement = React.createRef();
-
     let onMessageChange = () => {
         let text = newMessageElement.current.value;
-        props.dispatch(onMessageChangeActionCreator(text));
+        props.onMessageChange(text);
     }
-
+    debugger;
     return (
         <>
             <div class="col s4">
