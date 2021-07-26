@@ -25,10 +25,10 @@ export const useRoutes = (isAuthenticated, props) => {
                     <DetailPage/>
                 </Route>
                 <Route path="/profile">
-                    <Profile state={props.state}  dispatch={props.dispatch} newPostText={props.state.newPostText} postsData={props.state.profilePage.postsData}/>
+                    <Profile state={props.state}  dispatch={props.dispatch} />
                 </Route>
                 <Route path="/dialogs">
-                    <DialogsContainer state={props.state} dispatch={props.dispatch} newMessageText={props.state.newMessageText} dialogsData={props.state.dialogsPage.dialogsData} messagesData={props.state.dialogsPage.messagesData}/>
+                    <DialogsContainer state={props.state} dispatch={props.dispatch} />
                 </Route>
                 <Route path="/isauth">
                     <IsAuth/>
