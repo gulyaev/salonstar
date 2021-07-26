@@ -43,19 +43,20 @@ export let store = {
   subscribe(observer) {
     this._callSubscriber = observer;
   },
-
+/*
   dispatсh(action) {
     this._state.profilePage = profileReducer(this._state.profilePage, action);
     this._state.dialogsPage = dialogsReducer(this._state.dialogsPage, action);
 
     this._callSubscriber(this._state);
   }
+*/
 }
-
+/*
 export const addPostActionCreator = () => ({ type: 'ADD-POST' });
 export const onPostChangeActionCreator = (text) => ({ type: 'ON-POST-CHANGE', newText: text });
 export const addMessageActionCreator = () => ({ type: 'ADD-MESSAGE' });
 export const onMessageChangeActionCreator = (text) => ({ type: 'ON-MESSAGE-CHANGE', newText: text });
-
+*/
 export default store;
 window.store = store;

@@ -20,20 +20,33 @@ let initialState = {
   newMessageText: ''
 };
 
-const dialogsReducer = (state=initialState, action) => {
-  if (action.type === ADD_MESSAGE && state.newMessageText != '') {
-    let newMessage = {
-      id: 6,
-      name: 'Lev Letto',
-      message: state.newMessageText,
-    };
-    state.messagesData.push(newMessage);
-    state.newMessageText = '';
-  } else if (action.type === ON_MESSAGE_CHANGE) {
-    state.newMessageText = action.newText;
+const dialogsReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case ADD_MESSAGE:
+      {
+        let newMessage = {
+          id: 6,
+          name: 'Lev Letto',
+          message: state.newMessageText,
+        };
+        return {
+          ...state,
+          newMessageText: '',
+          messagesData: [...state.messagesData, { id: 6, name: 'Lev Letto', message: state.newMessageText, }]
+        };
+      }
+
+    case ON_MESSAGE_CHANGE:
+      {
+        return {
+          ...state,
+          newMessageText: action.newText
+        };
+      }
+    default:
+      return state;
   }
 
-  return state;
 }
 
 export const addMessageActionCreator = () => ({ type: ADD_MESSAGE });
