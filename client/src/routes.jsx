@@ -1,5 +1,5 @@
 import React from 'react';
-import {Route, Switch, Redirect} from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import LinksPage from '../src/pages/LinksPage';
 import CreatePage from '../src/pages/CreatePage';
 import DetailPage from '../src/pages/DetailPage';
@@ -10,46 +10,53 @@ import IsAuth from './pages/IsAuth';
 import Vacancies from './pages/Vacancies';
 import Courses from './pages/Courses';
 import DialogsContainer from './pages/Dialogs/DialogsContainer';
+import UsersContainer from './pages/UsersContainer';
 
 export const useRoutes = (isAuthenticated, props) => {
     if (isAuthenticated) {
         return (
             <Switch>
                 <Route path="/links" exact>
-                    <LinksPage/>
+                    <LinksPage />
                 </Route>
                 <Route path="/create" exact>
-                    <CreatePage/>
+                    <CreatePage />
                 </Route>
                 <Route path="/detail/:id">
-                    <DetailPage/>
+                    <DetailPage />
                 </Route>
                 <Route path="/profile">
-                    <Profile state={props.state}  dispatch={props.dispatch} />
+                    <Profile state={props.state} dispatch={props.dispatch} />
                 </Route>
                 <Route path="/dialogs">
                     <DialogsContainer state={props.state} dispatch={props.dispatch} />
                 </Route>
                 <Route path="/isauth">
-                    <IsAuth/>
+                    <IsAuth />
                 </Route>
                 <Route path="/vacancies">
-                    <Vacancies/>
+                    <Vacancies />
                 </Route>
                 <Route path="/courses">
-                    <Courses/>
+                    <Courses />
                 </Route>
-                <Redirect to='/create'/>
+                <Route path="/users">
+                    <UsersContainer state={props.state} dispatch={props.dispatch}/>
+                </Route>
+                <Redirect to='/create' />
             </Switch>
         )
     }
-        return (
-            <Switch>
-                <Route path="/" exact>
-                    <AuthPage/>
-                </Route>
-                <Redirect to="/"/>
-            </Switch>
-        )
-    
+    return (
+        <Switch>
+            <Route path="/" exact>
+                <AuthPage />
+            </Route>
+            <Route path="/users">
+                <UsersContainer />
+            </Route>
+            <Redirect to="/" />
+        </Switch>
+    )
+
 }

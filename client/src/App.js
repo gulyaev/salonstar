@@ -5,6 +5,7 @@ import { useRoutes } from './routes';
 import { BrowserRouter as Router } from 'react-router-dom';
 import NavbarTop from './pages/NavbarTop';
 import NavBarAside from './pages/NavBarAside';
+import * as axios from 'axios';
 
 const App = (props) => {
   const routes = useRoutes(true, props);

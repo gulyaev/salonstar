@@ -9,6 +9,7 @@ const NavBarAside = () => {
                 <div><NavLink to="/create" className="collection-item">Создать ссылку</NavLink></div>
                 <div><NavLink to="/detail/:id" className="collection-item">Посмотреть ссылки</NavLink></div>
                 <div><NavLink to="/profile" className="collection-item">Профиль</NavLink></div>
+                <div><NavLink to="/users" className="collection-item">Пользователи</NavLink></div>
                 <div><NavLink to="/dialogs" className="collection-item">Сообщения</NavLink></div>
                 <div><NavLink to="/courses" className="collection-item">Обучение</NavLink></div>
             </div>
