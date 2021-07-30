@@ -10,7 +10,7 @@ import IsAuth from './pages/IsAuth';
 import Vacancies from './pages/Vacancies';
 import Courses from './pages/Courses';
 import DialogsContainer from './pages/Dialogs/DialogsContainer';
-import UsersContainer from './pages/UsersContainer';
+import UsersContainer from './pages/Users/UsersContainer';
 
 export const useRoutes = (isAuthenticated, props) => {
     if (isAuthenticated) {
