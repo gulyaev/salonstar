@@ -1,14 +1,18 @@
 import React, { useEffect } from 'react';
-import 'materialize-css';
-import M from 'materialize-css';
-import { useRoutes } from './routes';
 import { BrowserRouter as Router } from 'react-router-dom';
 import NavbarTop from './pages/NavbarTop';
 import NavBarAside from './pages/NavBarAside';
-import * as axios from 'axios';
+import { useRoutes } from './routes';
+import { useAuth } from './hooks/auth.hook';
+import { AuthContext } from './context/AuthContext';
+import 'materialize-css';
+import M from 'materialize-css';
+
 
 const App = (props) => {
-  const routes = useRoutes(true, props);
+  const { token, login, logout, userId } = useAuth(); //auth.hook.js
+  const isAuthenticated = !!token;
+  const routes = useRoutes(isAuthenticated, props);
 
   //For workinh of dropdown menu
   useEffect(() => {
@@ -16,19 +20,24 @@ const App = (props) => {
     //elems.dropdown();
     M.Dropdown.init(elems, { inDuration: 300, outDuration: 225 });
   });
-//debugger;
+  //debugger;
+
   return (
-    <Router>
-      <div className={"container"}>
-        <NavbarTop />
-        <div class="row">
-          <NavBarAside />
-          <div class="col s9">
-            {routes}
+    <AuthContext.Provider value={{
+      token, login, logout, userId, isAuthenticated
+    }}>
+      <Router>
+        <div className={"container"}>
+          <NavbarTop />
+          <div class="row">
+            {isAuthenticated && <NavBarAside />}
+            <div class="col s9">
+              {routes}
+            </div>
           </div>
         </div>
-      </div>
-    </Router>
+      </Router>
+    </AuthContext.Provider>
   );
 }
 

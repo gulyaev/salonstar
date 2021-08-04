@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
@@ -21,13 +21,12 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function Users(props) {
-
-    let onPageChanged = (pageNumber) => {
-        props.setCurrentPage(pageNumber);
+class UsersC extends React.Component {
+    onPageChanged = (pageNumber) => {
+        props.setCurrentPage(pageNumber)
     }
 
-    let getUsers = () => {
+    getUsers = () => {
         if (props.usersData.length === 0) {
             axios.get(`/api/users/getusers?page=${props.currentPage}&limit=${props.pageSize}`)
                 .then(res => {
@@ -42,17 +41,18 @@ export default function Users(props) {
         }
     }
 
-    const classes = useStyles();
+    //const classes = useStyles();
 
-    let usersElements = props.state.usersPage.usersData.map(user => (<UserItem name={user.name} id={user._id} image={user.userImage} />));
+     usersElements = props.state.usersPage.usersData.map(user => (<UserItem name={user.name} id={user._id} image={user.userImage} />));
 
-    let pagesCount = Math.ceil(props.state.usersPage.totalUsersCount / props.state.usersPage.pageSize);
+    pagesCount = Math.ceil(props.state.usersPage.totalUsersCount / props.state.usersPage.pageSize);
 
-    let pages = [];
-    for (let i = 1; i <= pagesCount; i++) {
+    pages = [];
+    for (i = 1; i <= pagesCount; i++) {
         pages.push(i);
     }
-    debugger
+    debugger 
+    render () {
     return (
         <>
             <div className={classes.btnbtn} onClick={getUsers}>
@@ -60,7 +60,7 @@ export default function Users(props) {
             </div>
             <ul class="pagination">
                 <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
-                {pages.map(p => { return <li class={props.currentPage === p && "active"} onClick={(e) => { onPageChanged(p) }}><a href="#!">{p}</a></li> })}
+                {pages.map(p => {return <li class={props.currentPage === p && "active"} onClick={(e)=>{onPageChanged(p)}}><a href="#!">{p}</a></li> })}
                 <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
             </ul>
             <List className={classes.root}>
@@ -70,3 +70,5 @@ export default function Users(props) {
         </>
     );
 }
+}
+export default UsersC; 

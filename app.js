@@ -4,8 +4,8 @@ const config = require('config');
 const mongoose = require('mongoose');
 
 //Routes
-const postsRoutes = require ('./routes/posts.routes');
-const usersRoutes = require ('./routes/users.routes');
+//const postsRoutes = require ('./routes/posts.routes');
+//const usersRoutes = require ('./routes/users.routes');
 
 const app = express();
 
@@ -28,8 +28,8 @@ mongoose.connect(config.get('mongoUri'), {
     app.listen(PORT, () => console.log(`Server has been started on port ${PORT} ...`));
 
     //User routes
-    app.use('/api/posts', postsRoutes);
-    app.use('/api/users', usersRoutes);
+    //app.use('/api/posts', postsRoutes);
+    //app.use('/api/users', usersRoutes);
 
 /*
 async function start() {

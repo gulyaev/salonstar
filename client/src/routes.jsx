@@ -5,8 +5,6 @@ import CreatePage from '../src/pages/CreatePage';
 import DetailPage from '../src/pages/DetailPage';
 import AuthPage from '../src/pages/AuthPage';
 import Profile from './pages/Profile/Profile';
-import Dialogs from './pages/Dialogs/Dialogs';
-import IsAuth from './pages/IsAuth';
 import Vacancies from './pages/Vacancies';
 import Courses from './pages/Courses';
 import DialogsContainer from './pages/Dialogs/DialogsContainer';
@@ -30,9 +28,6 @@ export const useRoutes = (isAuthenticated, props) => {
                 </Route>
                 <Route path="/dialogs">
                     <DialogsContainer state={props.state} dispatch={props.dispatch} />
-                </Route>
-                <Route path="/isauth">
-                    <IsAuth />
                 </Route>
                 <Route path="/vacancies">
                     <Vacancies />

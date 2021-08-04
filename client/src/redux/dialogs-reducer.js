@@ -24,11 +24,13 @@ const dialogsReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_MESSAGE:
       {
+        /*
         let newMessage = {
           id: 6,
           name: 'Lev Letto',
           message: state.newMessageText,
         };
+        */
         return {
           ...state,
           newMessageText: '',

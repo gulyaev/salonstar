@@ -1,8 +1,17 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import { useRoutes } from '../routes';
+import React, { useContext } from 'react';
+import { NavLink, useHistory } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 
 const NavbarTop = () => {
+    const history = useHistory();
+    const auth = useContext(AuthContext);
+
+    const logoutHandler = (event) => {
+        event.preventDefault();
+        auth.logout();
+        history.push('/');
+    }
+
     return (
         <>
             <ul id="dropdown1" class="dropdown-content">
@@ -23,8 +32,8 @@ const NavbarTop = () => {
                             <li><NavLink to="/vacancies">Посмотреть вакансии</NavLink></li>
                             <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Ищу сотрудника<i class="material-icons right">arrow_drop_down</i></a></li>
                             <li><a class="dropdown-trigger" href="#!" data-target="dropdown2">Ищу работу<i class="material-icons right">arrow_drop_down</i></a></li>
-                            <li><NavLink to="/isauth" className="amber accent-4 waves-effect waves-light btn black-text"> Войти  <i class="material-icons right">keyboard_tab</i></NavLink></li>
-
+                            {auth.isAuthenticated && <li><a href="/" onClick={logoutHandler} className="amber accent-4 waves-effect waves-light btn black-text"> Выйти  <i class="material-icons right">keyboard_tab</i></a></li>}
+                            
                         </ul>
                     </div>
                 </div>

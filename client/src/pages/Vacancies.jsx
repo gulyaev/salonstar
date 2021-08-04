@@ -32,7 +32,7 @@ const Vacancies = () => {
             <div class="col s12 m6">
                 <div class="card small">
                     <div class="card-image">
-                        <img src="https://lorempixel.com/100/190/nature/6" />
+                        <img src="https://lorempixel.com/100/190/nature/6" alt=''/>
                         <span class="card-title">Card Title</span>
                     </div>
                     <div class="card-stacked">

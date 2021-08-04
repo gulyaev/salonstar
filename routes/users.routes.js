@@ -2,73 +2,99 @@ const express = require('express');
 const router = express.Router();
 const Users = require('../models/Users');
 const bodyParser = require('body-parser');
-const multer = require ('multer');
+const multer = require('multer');
 const mongoose = require('mongoose');
 
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'uploads/');
-    },
-    filename: function (req, file, cb) {
-      cb(null, new Date().toISOString() + file.originalname);
-    },
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, new Date().toISOString() + file.originalname);
+  },
 });
 
-const upload = multer ({storage: storage});
+const upload = multer({ storage: storage });
 
 
 // /api/users/getusers
 //get all users
-router.get ('/getusers', async (req, res) => {
+router.get('/getusers', async (req, res) => {
   try {
+    const page = parseInt(req.query.page);
+    const limit = parseInt(req.query.limit);
+
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+
     const users = await Users.find()
       .select("_id email name userImage")
-     .exec()
-     /*
-     .then(docs=>{
-      console.log(docs);
-          const response = {
-            users: docs.map(doc=>{
-              return {
-                _id: doc._id,
-                name: doc.name,
-                userImage: doc.userImage,
-                request: {
-                  type: "GET",
-                  url: "http://127.0.0.1:5000/api/users/getusers" + doc._id
-                }
-              }
-            })
-          } 
-      });  
-     */
-    console.log(users);
+      .exec()
+    /*
+    .then(docs=>{
+     console.log(docs);
+         const response = {
+           users: docs.map(doc=>{
+             return {
+               _id: doc._id,
+               name: doc.name,
+               userImage: doc.userImage,
+               request: {
+                 type: "GET",
+                 url: "http://127.0.0.1:5000/api/users/getusers" + doc._id
+               }
+             }
+           })
+         } 
+     });  
+    */
+    const results = {}
+
+    if (endIndex < users.length) {
+      results.next = {
+        page: page + 1,
+        limit: limit
+      }
+    }
+    
+    if (startIndex > 0) {
+      results.previous = {
+        page: page - 1,
+        limit: limit
+      }
+    }
+    results.totalCount = users.length;
+    results.results = users.slice(startIndex, endIndex);
+     
+    console.log(results);
+    console.log(users.length);
+    
     if (!users) throw Error('No items');
-    
-    res.status(200).json(users);
-    
-  } catch(err ) {
-    res.status(400).json({msg: err});
+
+    res.status(200).json(results);
+
+  } catch (err) {
+    res.status(400).json({ msg: err });
   }
 });
 
 // /api/users/getusers/:id
 //get a user
-router.get ('/getusers/:id', async (req, res) => {
+router.get('/getusers/:id', async (req, res) => {
   try {
     const user = await Users.findById(req.params.id);
-    if (!user ) throw Error('No items');
-    
+    if (!user) throw Error('No items');
+
     res.status(200).json(user);
-    
-  } catch(err ) {
-    res.status(400).json({msg: err});
+
+  } catch (err) {
+    res.status(400).json({ msg: err });
   }
 });
 
 // /api/users/createuser
 //create a user
-router.post ('/createuser', upload.single('userImage'),async (req, res) => {
+router.post('/createuser', upload.single('userImage'), async (req, res) => {
   console.log('req.file:', req.file);
   const newUser = new Users({
     _id: new mongoose.Types.ObjectId(),
@@ -82,8 +108,8 @@ router.post ('/createuser', upload.single('userImage'),async (req, res) => {
     if (!user) throw Error('Something went wrong while saving the user');
 
     res.status(200).json(user);
-  } catch(err ) {
-    res.status(400).json({msg: err});
+  } catch (err) {
+    res.status(400).json({ msg: err });
   }
 
   //res.send('Let!s create post!');
@@ -91,27 +117,27 @@ router.post ('/createuser', upload.single('userImage'),async (req, res) => {
 
 // /api/users/deleteuser
 //delete a user
-router.delete ('/deleteuser/:id', async (req, res) => {
+router.delete('/deleteuser/:id', async (req, res) => {
   try {
     const user = await Users.findByIdAndDelete(req.params.id);
     if (!user) throw Error('No post found');
-    res.status(200).json({success: true});
-    
-  } catch(err ) {
-    res.status(400).json({msg: err});
+    res.status(200).json({ success: true });
+
+  } catch (err) {
+    res.status(400).json({ msg: err });
   }
 });
 
 // /api/users/updateuser/:id
 // update a user
-router.patch ('/updateuser/:id', async (req, res) => {
+router.patch('/updateuser/:id', async (req, res) => {
   try {
     const user = await Users.findByIdAndUpdate(req.params.id, req.body);
     if (!user) throw Error('Something went wrong while updating the post');
-    res.status(200).json({success: true});
-    
-  } catch(err ) {
-    res.status(400).json({msg: err});
+    res.status(200).json({ success: true });
+
+  } catch (err) {
+    res.status(400).json({ msg: err });
   }
 });
 

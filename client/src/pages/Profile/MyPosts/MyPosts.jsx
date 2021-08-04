@@ -1,7 +1,6 @@
 import React from 'react';
 import s from './MyPosts.module.css';
 import Post from './Post/Post';
-import { addPostActionCreator, onPostChangeActionCreator } from '../../../redux/store';
 
 const MyPosts = (props) => {
     let postsElements = props.state.profilePage.postData.map(post => (<Post message={post.message} likesCount={post.likesCount} />));
@@ -35,7 +34,7 @@ const MyPosts = (props) => {
                     </div>
                 </div>
                 <div>
-                    <a class="waves-effect waves-light btn" onClick={addPost}>Опубликовать на стене</a>
+                    <button class="waves-effect waves-light btn" onClick={addPost}>Опубликовать на стене</button>
                 </div>
             </div>
             <div className={s.posts}>
