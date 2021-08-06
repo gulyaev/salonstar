@@ -31,7 +31,7 @@ const App = (props) => {
           <NavbarTop />
           <div class="row">
             {isAuthenticated && <NavBarAside />}
-            <div class="col s9">
+            <div class="col s9 l9">
               {routes}
             </div>
           </div>

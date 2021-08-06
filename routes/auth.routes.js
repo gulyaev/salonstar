@@ -98,7 +98,8 @@ router.post(
                 {expiresIn: '1h'}
                 );
 
-                res.json({token, userId: user.id});
+                res.json({token, userId: user.id, message: 'Вход осуществлен'});
+                //res.status(201).json({ message: 'Вход осуществлен' })
 
         } catch (e) {
             res.status(500).json({message: 'Что-то пошло не так, попробуйте снова'});

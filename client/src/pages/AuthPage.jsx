@@ -50,8 +50,8 @@ const AuthPage = () => {
 
     return (
         <div className="row">
-            <h4>Войдите или зарегистрируйтесь</h4>
-            <div className="col s6 m6 l6 offset-s0">
+            <h4 class="card-panel">Войдите или зарегистрируйтесь</h4>
+            <div className="col s6 m6 l6 offset-l2">
                 
 
                 <div className="card teal lighten-2">
