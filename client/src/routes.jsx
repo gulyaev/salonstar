@@ -20,9 +20,6 @@ export const useRoutes = (isAuthenticated, props) => {
                 <Route path="/create" exact>
                     <CreatePage />
                 </Route>
-                <Route path="/detail/:id">
-                    <DetailPage />
-                </Route>
                 <Route path="/profile">
                     <Profile state={props.state} dispatch={props.dispatch} />
                 </Route>
