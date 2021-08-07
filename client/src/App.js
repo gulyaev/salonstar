@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import NavbarTop from './pages/NavbarTop';
-import NavBarAside from './pages/NavBarAside';
+import NavbarTop from './components/NavbarTop';
+import NavBarAside from './components/NavBarAside';
+import Loader from './components/Loader';
 import { useRoutes } from './routes';
 import { useAuth } from './hooks/auth.hook';
 import { AuthContext } from './context/AuthContext';
@@ -10,7 +11,7 @@ import M from 'materialize-css';
 
 
 const App = (props) => {
-  const { token, login, logout, userId } = useAuth(); //auth.hook.js
+  const { token, login, logout, userId, ready } = useAuth(); //auth.hook.js
   const isAuthenticated = !!token;
   const routes = useRoutes(isAuthenticated, props);
 
@@ -21,6 +22,10 @@ const App = (props) => {
     M.Dropdown.init(elems, { inDuration: 300, outDuration: 225 });
   });
   //debugger;
+
+  if (!ready) {
+    return <Loader />
+  }
 
   return (
     <AuthContext.Provider value={{
