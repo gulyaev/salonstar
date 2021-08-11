@@ -7,15 +7,15 @@ const LinksList = ({ links }) => {
     }
 
     return (
-        <>
+        <div class="table-responsive">
             <h4>Ссылки</h4>
             <table class="striped">
                 <thead>
                     <tr>
                         <th>№</th>
-                        <th>Оригинальная</th>
                         <th>Сокращенная</th>
-                        <th>Открыть</th>
+                        <th>Оригинальная</th>
+                        <th>Статистика</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -23,8 +23,8 @@ const LinksList = ({ links }) => {
                         return (
                             <tr key={link._id}>
                                 <td>{index + 1}</td>
-                                <td>{link.from}</td>
                                 <td>{link.to}</td>
+                                <td>{link.from}</td>
                                 <td>
                                     <Link to={`/detail/${link._id}`}>Открыть</Link>
                                 </td>
@@ -33,7 +33,7 @@ const LinksList = ({ links }) => {
                     })}
                 </tbody>
             </table>
-        </>
+        </div>
     )
 }
 

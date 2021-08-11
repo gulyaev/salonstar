@@ -1,6 +1,7 @@
 const bodyParser = require('body-parser');
 const express = require ('express');
 const config = require('config');
+const path = require('path');
 const mongoose = require('mongoose');
 
 //Routes
@@ -17,6 +18,14 @@ app.use('/api/posts/', require('./routes/posts.routes'));
 app.use('/api/users/', require('./routes/users.routes'));
 app.use('/api/link/', require('./routes/link.routes'));
 app.use('/t', require('./routes/redirect.routes'));
+
+if (process.env.NODE_ENV === 'production') {
+    app.use('/', express.static(path.join(__dirname, 'client', 'build')));
+
+    app.get('*', (req,res)=>{
+        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+    })
+}
 
 
 

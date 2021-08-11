@@ -6,30 +6,33 @@ import LinksList from '../components/LinksList';
 
 const LinksPage = () => {
     const [links, setLinks] = useState([]);
-    const {loading, request} = useHttp();
-    const {token} = useContext(AuthContext);
+    const { loading, request } = useHttp();
+    const { token } = useContext(AuthContext);
 
-    const fetchLinks = useCallback(async()=>{
+    const fetchLinks = useCallback(async () => {
         try {
-            const fetched = await request ('/api/link', 'GET', null, {
+            debugger;
+            const fetched = await request('/api/link', 'GET', null, {
                 Authorization: `Bearer ${token}`
             });
             setLinks(fetched);
-        } catch (e) {}
-    },[token, request])
+            console.log(links);
+        } catch (e) { }
+    }, [token, request])
 
-    useEffect (()=>{
+    useEffect(() => {
         fetchLinks();
-    },[fetchLinks])
+    }, [fetchLinks])
 
-    if (loading){
-        return <Loader/>
+    if (loading) {
+        return <Loader />
     }
-
+    debugger;
     return (
-        <>
-            {!loading && <LinksList links={links}/>}
-        </>
+        
+            <div>
+                {!loading && <LinksList links={links} />}
+            </div>
     );
 }
 

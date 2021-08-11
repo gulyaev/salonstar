@@ -64,10 +64,10 @@ router.get('/getusers', async (req, res) => {
       }
     }
     results.totalCount = users.length;
-    results.results = users.slice(startIndex, endIndex);
+    results.results = users.slice(startIndex, endIndex);//вывод пользователей в пределах заданного размера порции
      
     console.log(results);
-    console.log(users.length);
+    console.log(users.length);//общее число пользователей
     
     if (!users) throw Error('No items');
 
@@ -98,6 +98,7 @@ router.post('/createuser', upload.single('userImage'), async (req, res) => {
   console.log('req.file:', req.file);
   const newUser = new Users({
     _id: new mongoose.Types.ObjectId(),
+    password: req.body.password,
     email: req.body.email,
     name: req.body.name,
     userImage: req.file.path

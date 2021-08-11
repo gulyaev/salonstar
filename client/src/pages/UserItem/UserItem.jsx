@@ -32,7 +32,12 @@ const UserItem = (props) => {
     let subscribe =()=>{
         //alert('subscribed');
     }
+    
+    //let str = JSON.stringify(props.image);
+    //console.log(str)
+    //let strslc = str.slice(8);
 
+    //debugger;
     return (
         <>
             <ListItem alignItems="flex-start">

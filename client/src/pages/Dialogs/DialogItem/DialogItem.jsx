@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 
 const DialogItem = (props) => {
     let path = "/dialogs/" + props.id;
+    debugger;
     return (
         <>
             <li className="collection-item avatar">

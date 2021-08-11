@@ -64,7 +64,7 @@ router.post(
 router.post(
     '/login', 
     [
-        check('email', 'Введите корректный email').normalizeEmail().isEmail(),
+        //check('email', 'Введите корректный email').normalizeEmail().isEmail(),
         check('password', 'Введите пароль').exists()
     ], 
     async (req, res) => {
@@ -85,6 +85,7 @@ router.post(
             if (!user) {
                 return res.status(400).json({message: 'Пользователь не найден'});
             }
+            
     
             const isMatch = await bcrypt.compare(password, user.password);
 
