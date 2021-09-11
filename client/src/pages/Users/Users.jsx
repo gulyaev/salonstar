@@ -8,10 +8,10 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         maxWidth: '72ch',
         backgroundColor: theme.palette.background.paper,
-        margin: '10px 0px',
+        margin: '10px 0px'
     },
     inline: {
-        display: 'inline',
+        display: 'inline'
     },
     btnbtn: {
         margin: '8px 0px'
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Users({getUsers, onPageChanged, pages, usersElements}, props) {
     const classes = useStyles();
-debugger;
+
     return (
         <>
             <div className={classes.btnbtn} onClick={getUsers}>

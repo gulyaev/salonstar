@@ -121,7 +121,7 @@ router.post('/createuser', upload.single('userImage'), async (req, res) => {
 router.delete('/deleteuser/:id', async (req, res) => {
   try {
     const user = await Users.findByIdAndDelete(req.params.id);
-    if (!user) throw Error('No post found');
+    if (!user) throw Error('No user found');
     res.status(200).json({ success: true });
 
   } catch (err) {

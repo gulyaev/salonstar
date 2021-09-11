@@ -1,4 +1,5 @@
 import React from 'react';
+import { useParams } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
@@ -8,15 +9,23 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
+import { NavLink } from 'react-router-dom';
+import { useHttp } from '../../hooks/http.hook';
+import { useMessage } from '../../hooks/message.hook';
+
 
 const useStyles = makeStyles((theme) => ({
     inline: {
-        display: 'inline',
+        display: 'inline'
     }
 }));
 
 const UserItem = (props) => {
     const classes = useStyles();
+    const message = useMessage();
+    const { loading, request, error, clearError } = useHttp();
+    const linkId = useParams().id;
+    const id = props.id;
 
     const [state, setState] = React.useState({
         checkedA: false
@@ -29,20 +38,28 @@ const UserItem = (props) => {
 
     let path = "/user/" + props.id;
 
-    let subscribe =()=>{
+    let subscribe = () => {
         //alert('subscribed');
     }
-    
-    //let str = JSON.stringify(props.image);
-    //console.log(str)
-    //let strslc = str.slice(8);
 
-    //debugger;
+    const clickUserHandler = async () => {
+        //alert("Клик по юзеру");
+        try {
+            alert("Начало");
+            const data = await request(`/api/profile/profile/6105c18e95861e1ac17cbef9`, 'GET');
+            console.log('Data', data);
+            //message(data.message);
+            alert("Конец");
+        } catch (e) {
+
+        }
+    }
+
     return (
         <>
             <ListItem alignItems="flex-start">
                 <ListItemAvatar>
-                    <Avatar alt="Remy Sharp" src={props.image} />
+                    <NavLink to={"/profile/" + props.id} onClick={clickUserHandler}><Avatar alt="Remy Sharp" src={props.image} /></NavLink>
                 </ListItemAvatar>
                 <ListItemText
                     primary={props.name}
@@ -53,6 +70,7 @@ const UserItem = (props) => {
                                 variant="body2"
                                 className={classes.inline}
                                 color="textPrimary"
+
                             >
                                 {props.name}
                             </Typography>
@@ -66,6 +84,7 @@ const UserItem = (props) => {
                         label="Подписаться" onClick={subscribe}
                     />
                 </ListItemSecondaryAction>
+
             </ListItem>
         </>
     )

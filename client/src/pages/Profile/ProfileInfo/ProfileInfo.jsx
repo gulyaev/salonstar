@@ -1,7 +1,11 @@
 import React from 'react';
 import ImageAvatars from '../Avatar/ImageAvatars';
+import Loader from "../../../components/Loader";
 
-const ProfileInfo = () => {
+const ProfileInfo = (props) => {
+    if (!props.profile) {
+		return <Loader />
+	}
 
     return (
         <>
@@ -15,6 +19,7 @@ const ProfileInfo = () => {
                             </div>
                             <div class="col s10">
                                 <span class="black-text">
+                                    <p>{props.profile.email}</p>
                                     This is a square image. Add the "circle" class to it to make it appear circular.
                                 </span>
                             </div>

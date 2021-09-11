@@ -4,7 +4,7 @@ import LinksPage from '../src/pages/LinksPage';
 import CreatePage from '../src/pages/CreatePage';
 import DetailPage from '../src/pages/DetailPage';
 import AuthPage from '../src/pages/AuthPage';
-import Profile from './pages/Profile/Profile';
+import ProfileContainer from './pages/Profile/ProfileContainer';
 import Vacancies from './pages/Vacancies';
 import Courses from './pages/Courses';
 import DialogsContainer from './pages/Dialogs/DialogsContainer';
@@ -23,8 +23,8 @@ export const useRoutes = (isAuthenticated, props) => {
                 <Route path="/detail/:id">
                     <DetailPage />
                 </Route>
-                <Route path="/profile">
-                    <Profile state={props.state} dispatch={props.dispatch} />
+                <Route path="/profile/:userId?">
+                    <ProfileContainer state={props.state} dispatch={props.dispatch} />
                 </Route>
                 <Route path="/dialogs">
                     <DialogsContainer state={props.state} dispatch={props.dispatch} />

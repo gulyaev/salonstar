@@ -1,29 +1,39 @@
 import React from 'react';
-import { followActionCreator, unfollowActionCreator, setUsersActionCreator, setCurrentPageActionCreator, setTotalUsersCountActionCreator } from '../../redux/users-reducer';
+import {
+    follow,
+    unfollow,
+    setUsers,
+    setCurrentPage,
+    setTotalUsersCount,
+    toggleIsFetching
+} from '../../redux/users-reducer';
 import UserItem from "../UserItem/UserItem";
 import Users from "./Users";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 const axios = require('axios').default;
 
 function UsersContainer(props) {
 
     let onPageChanged = (pageNumber) => {
         props.setCurrentPage(pageNumber);
+        props.toggleIsFetching(true);
         axios.get(`/api/users/getusers?page=${pageNumber}&limit=${props.pageSize}`)
             .then(res => {
+                props.toggleIsFetching(false);
                 props.setUsers(res.data.results);
             });
     }
 
     let getUsers = () => {
         if (props.usersData.length === 0) {
+            props.toggleIsFetching(true);
             axios.get(`/api/users/getusers?page=${props.currentPage}&limit=${props.pageSize}`)
                 .then(res => {
+                    props.toggleIsFetching(false);
                     console.log(res.data);
                     //props.setUsers(res.data.results);
                     props.setTotalUsersCount(res.data.totalCount);
                     props.setUsers(res.data.results);
-
                 })
                 .catch(err => {
                     //Handle Error Here
@@ -41,29 +51,18 @@ function UsersContainer(props) {
     }
 
     return (
-        <Users getUsers={getUsers} onPageChanged={onPageChanged} pages={pages} usersElements={usersElements} currentPage={props.currentPage}/>
+        <Users getUsers={getUsers} onPageChanged={onPageChanged} pages={pages} usersElements={usersElements} currentPage={props.currentPage} />
     );
 }
 
 let mapStateToProps = (state) => {
-	return {
-		usersData: state.usersPage.usersData,
+    return {
+        usersData: state.usersPage.usersData,
         pageSize: state.usersPage.pageSize,
         totalUsersCount: state.usersPage.totalUsersCount,
-		currentPage: state.usersPage.currentPage 
-	}
+        currentPage: state.usersPage.currentPage,
+        isFetching: state.usersPage.isFetching
+    }
 }
 
-let mapDispatchToProps = (dispatch) => {
-	return {
-		follow: (userId)=>{dispatch(followActionCreator(userId));},
-		unfollow: (userId)=>{dispatch(unfollowActionCreator(userId));},
-        setUsers: (users)=>{dispatch(setUsersActionCreator(users));},
-		setCurrentPage: (pageNumber)=>{dispatch(setCurrentPageActionCreator(pageNumber));},
-		setTotalUsersCount: (totalCount)=>{dispatch(setTotalUsersCountActionCreator(totalCount));}
-	}
-}
-
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(UsersContainer);
+export default connect(mapStateToProps, { follow, unfollow, setUsers, setCurrentPage, setTotalUsersCount, toggleIsFetching })(UsersContainer);

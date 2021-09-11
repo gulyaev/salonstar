@@ -33,7 +33,7 @@ const NavbarTop = () => {
                             <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Ищу сотрудника<i class="material-icons right">arrow_drop_down</i></a></li>
                             <li><a class="dropdown-trigger" href="#!" data-target="dropdown2">Ищу работу<i class="material-icons right">arrow_drop_down</i></a></li>
                             {auth.isAuthenticated && <li><a href="/" onClick={logoutHandler} className="amber accent-4 waves-effect waves-light btn black-text"> Выйти  <i class="material-icons right">keyboard_tab</i></a></li>}
-                            
+
                         </ul>
                     </div>
                 </div>

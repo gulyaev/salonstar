@@ -10,7 +10,8 @@ const AuthPage = () => {
     const { loading, request, error, clearError } = useHttp();
     const [form, setForm] = useState({
         email: '',
-        password: ''
+        password: '',
+        adminCode: ''
     });
 
     useEffect(() => {
@@ -95,6 +96,18 @@ const AuthPage = () => {
                                     onKeyPress={pressHandler}
                                 />
                                 <label htmlFor="password">Пароль</label>
+                            </div>
+
+                            <div className="input-field">
+                                <input
+                                    type="text"
+                                    id="adminCode"
+                                    name="adminCode"
+                                    className="yellow-input"
+                                    value={form.adminCode}
+                                    onChange={changeHandler}
+                                />
+                                <label htmlFor="adminCode">Код администратора</label>
                             </div>
 
                         </div>
