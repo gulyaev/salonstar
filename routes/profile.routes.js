@@ -18,11 +18,12 @@ const upload = multer({ storage: storage });
 
 router.post('/test', (req, res) => {
   console.log( 'req.body', req.body );
-  res.status(200).json({message:"Successfully Sended"});
+  //res.status(200).json({message:"Successfully Sended"});
   //console.log(res);
-  //res.send('Okh');
+  res.send('Okh');
 })
 
+/*
 router.get('/profile/:id', async (req, res) => {
   //console.log('req.body', req.body);
   try {
@@ -40,6 +41,7 @@ router.get('/profile/:id', async (req, res) => {
     res.status(400).json({ msg: err });
   }
 });
+*/
 
 // /api/users/getusers
 //get all users
@@ -76,22 +78,15 @@ router.get('/profile/', async (req, res) => {
 
 // /api/users/getusers/:id
 //get a user
-//USER PROFILE
+//USER PROFILE My
+
 router.get('/profile/:id', async (req, res) => {
-  //console.log('req.body', req.body);
   try {
-    //const user = await Users.findById(req.params.id);
-    //res.render("users/show", {user: foundUser});
+    const user = await Users.findById(req.params.id);
     
     //if (!user) throw Error('No items');
-    //res.status(200).json(user);
-
-    const user = await Users.findById(req.params.id);
-    if (!user ) throw Error('No items');
-    res.send('Okh');  
-    //res.status(200).json(user);
-
-      
+    //res.send('Okh');  
+    res.status(200).json(user);
   } catch (err) {
     res.status(400).json({ msg: err });
   }

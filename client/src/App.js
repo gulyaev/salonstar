@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import NavbarTop from './components/NavbarTop';
 import NavBarAside from './components/NavBarAside';
 import Loader from './components/Loader';
 import { useRoutes } from './routes';
@@ -8,10 +7,11 @@ import { useAuth } from './hooks/auth.hook';
 import { AuthContext } from './context/AuthContext';
 import 'materialize-css';
 import M from 'materialize-css';
+import NavbarTopContainer from './components/NavbarTopContainer';
 
 
 const App = (props) => {
-  const { token, login, logout, userId, ready } = useAuth(); //auth.hook.js
+  const { token, login, logout, userId, userEmail, userLogin, ready } = useAuth(); //auth.hook.js
   const isAuthenticated = !!token;
   const routes = useRoutes(isAuthenticated, props);
 
@@ -29,15 +29,19 @@ const App = (props) => {
 
   return (
     <AuthContext.Provider value={{
-      token, login, logout, userId, isAuthenticated
+      token, login, logout, userId, userEmail, userLogin, isAuthenticated
     }}>
       <Router>
         <div className={"container"}>
-          <NavbarTop />
+          <NavbarTopContainer />
           <div class="row">
             {isAuthenticated && <NavBarAside />}
             <div class="col s9 l9">
-              {routes}
+              {routes
+              }
+              {
+                //<useRoutes isAuthenticated={isAuthenticated}/>
+              }
             </div>
           </div>
         </div>

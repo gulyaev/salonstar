@@ -3,6 +3,7 @@ import ImageAvatars from '../Avatar/ImageAvatars';
 import Loader from "../../../components/Loader";
 
 const ProfileInfo = (props) => {
+    //debugger;
     if (!props.profile) {
 		return <Loader />
 	}
@@ -20,6 +21,7 @@ const ProfileInfo = (props) => {
                             <div class="col s10">
                                 <span class="black-text">
                                     <p>{props.profile.email}</p>
+                                    <p>{props.profile.login}</p>
                                     This is a square image. Add the "circle" class to it to make it appear circular.
                                 </span>
                             </div>

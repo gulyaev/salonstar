@@ -6,9 +6,11 @@ const { check, validationResult } = require('express-validator')
 const Users = require('../models/Users');
 const router = Router();
 const mongoose = require('mongoose');
+var bodyParser = require('body-parser');
+var jsonParser = bodyParser.json();
 
-router.get('/test', (req, res) => {
-  console.log('req.body', req.body);
+router.get('/test', jsonParser, (req, res) => {
+  console.log('req.body', req.body.todo);
   res.send('Okh');
 })
 
@@ -29,54 +31,59 @@ router.post('/register', async (req, res) => {
 */
 
 // /api/auth/register
-
 router.post(
   '/register',
-  
+
   [
     check('email', 'Некорректный email').isEmail(),
     check('password', 'Минимальная длина пароля 6 символов')
       .isLength({ min: 6 })
   ],
-  
+
   async (req, res) => {
-    
-  try {
-    const errors = validationResult(req)
 
-    
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        errors: errors.array(),
-        message: 'Некорректный данные при регистрации'
-      }) 
-    }
-    
+    try {
+      const errors = validationResult(req)
 
-    const {email, password, adminCode} = req.body
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          errors: errors.array(),
+          message: 'Некорректный данные при регистрации'
+        })
+      }
 
-    const candidate = await Users.findOne({ email })
- 
-    if (candidate) {
-      return res.status(400).json({ message: 'Такой пользователь уже существует' })
-    }
+      const {email, login, password, adminCode} = req.body
 
-    const hashedPassword = await bcrypt.hash(password, 12)
-    const user = new Users({ email: email, password: hashedPassword, adminCode: adminCode });
-    if (req.body.adminCode === 'secretcode123') {
+      const candidate = await Users.findOne({ email })
+
+      if (candidate) {
+        return res.status(400).json({ message: 'Такой пользователь уже существует' })
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 12)
+      const user = new Users({ email: email, login: login, password: hashedPassword, adminCode: adminCode });
+      
+      if (req.body.adminCode === 'secretcode123') {
         user.isAdmin = true;
+      }
+      
+      await user.save();
+
+      const token = jwt.sign(
+        { userId: user.id,
+          email: user.email,
+          login: user.login 
+        },
+        config.get('jwtSecret'),
+        { expiresIn: '1h' }
+      );
+
+      res.status(201).json({ message: 'Пользователь создан', currentUser: user.isAdmin, token: token, userId: user.id, userEmail: user.email, userLogin: user.login });
+
+    } catch (e) {
+      res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' })
     }
-
-    await user.save()
-
-    console.log("user.isAdmin " + user.isAdmin);
-  res.status(201).json({ message: 'Пользователь создан', currentUser: user.isAdmin });
-  
-
-  } catch (e) {
-    res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' })
-  }
-});
+  });
 
 // /api/auth/login
 router.post(
@@ -96,7 +103,7 @@ router.post(
         });
       }
 
-      const { email, password } = req.body;
+      const { email, login, password, adminCode } = req.body;
 
       const user = await Users.findOne({ email: email });
 
@@ -117,12 +124,32 @@ router.post(
         { expiresIn: '1h' }
       );
 
-      res.json({ token, userId: user.id, message: 'Вход осуществлен' });
+      res.json({ token, userId: user.id, userEmail: user.email, userLogin: user.login, message: 'Вход осуществлен' });
       //res.status(201).json({ message: 'Вход осуществлен' })
 
     } catch (e) {
       res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' });
     }
   });
+
+// /api/auth/me
+router.post('/me', async (req, res) => {
+  try {
+    const { userId } = req.body;
+    console.log('req.body1', req.body);
+
+    const user = await Users.findOne({ _id: userId });
+
+    if (!user) {
+      return res.status(400).json({ message: 'Пользователь не найден' });
+    }
+
+    res.json({ userId: user.id, userEmail: user.email, userLogin: user.login, message: 'Вы авторизованы в системе', isAdmin: user.isAdmin });
+
+  } catch (e) {
+    res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' });
+  }
+
+});
 
 module.exports = router;

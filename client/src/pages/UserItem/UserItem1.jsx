@@ -20,9 +20,8 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const UserItem = (props) => {
+const UserItem1 = (props) => {
     const classes = useStyles();
-    const message = useMessage();
     const { loading, request, error, clearError } = useHttp();
     const linkId = useParams().id;
     const id = props.id;
@@ -36,20 +35,18 @@ const UserItem = (props) => {
         alert('subscribed');
     };
 
-    let path = "/user/" + props.id;
-
     let subscribe = () => {
         alert('subscribed');
     }
 
+    let unsubscribe = () => {
+        alert('unsubscribe');
+    }
+
     const clickUserHandler = async () => {
-        //alert("Клик по юзеру");
         try {
-            alert("Начало");
-            const data = await request(`/api/profile/profile/6105c18e95861e1ac17cbef9`, 'GET');
-            console.log('Data', data);
-            //message(data.message);
-            alert("Конец");
+            const data = await request(`/api/profile/profile/` + id, 'GET');
+            //console.log('Data1', data);
         } catch (e) {
 
         }
@@ -78,16 +75,23 @@ const UserItem = (props) => {
                         </React.Fragment>
                     }
                 />
-                <ListItemSecondaryAction>
-                    <FormControlLabel
-                        control={<Checkbox checked={state.checkedA} onChange={handleChange} name="checkedA" />}
-                        label="Подписаться" onClick={subscribe}
-                    />
-                </ListItemSecondaryAction>
-
+                {props.followed
+                    ? <ListItemSecondaryAction>
+                        <FormControlLabel
+                            control={<Checkbox checked={state.checkedA} onChange={handleChange} name="checkedA" />}
+                            label="Подписаться" onClick={subscribe}
+                        />
+                    </ListItemSecondaryAction>
+                    : <ListItemSecondaryAction>
+                        <FormControlLabel
+                            control={<Checkbox checked={state.checkedA} onChange={handleChange} name="checkedA" />}
+                            label="Отписаться" onClick={unsubscribe}
+                        />
+                    </ListItemSecondaryAction>
+                }
             </ListItem>
         </>
     )
 }
 
-export default UserItem;
+export default UserItem1;

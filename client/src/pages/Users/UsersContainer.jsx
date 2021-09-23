@@ -7,7 +7,7 @@ import {
     setTotalUsersCount,
     toggleIsFetching
 } from '../../redux/users-reducer';
-import UserItem from "../UserItem/UserItem";
+import UserItem1 from "../UserItem/UserItem1";
 import Users from "./Users";
 import { connect } from "react-redux";
 const axios = require('axios').default;
@@ -42,13 +42,15 @@ function UsersContainer(props) {
         }
     };
 
-    let usersElements = props.state.usersPage.usersData.map(user => (<UserItem name={user.name} id={user._id} image={user.userImage} />));
+    let usersElements = props.state.usersPage.usersData.map(user => (<UserItem1 name={user.name} id={user._id} image={user.userImage} followed={true}/>));
     let pagesCount = Math.ceil(props.state.usersPage.totalUsersCount / props.state.usersPage.pageSize);
 
     let pages = [];
     for (let i = 1; i <= pagesCount; i++) {
         pages.push(i);
     }
+
+    //debugger;
 
     return (
         <Users getUsers={getUsers} onPageChanged={onPageChanged} pages={pages} usersElements={usersElements} currentPage={props.currentPage} />

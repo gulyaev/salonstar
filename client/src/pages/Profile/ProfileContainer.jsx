@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-    setUserProfile
-} from '../../redux/profile-reducer';
+import { setUserProfile } from '../../redux/profile-reducer';
 import { connect } from "react-redux";
 import { withRouter } from 'react-router-dom';
 import Profile from "./Profile";
@@ -11,35 +9,37 @@ import { useMessage } from '../../hooks/message.hook';
 const ProfileContainer = (props) => {
     const message = useMessage();
     const { loading, request, error, clearError } = useHttp();
-    
+
     let userId = props.match.params.userId;
 
     if (!userId) {
-        userId="6130956732d75f01f59c4233";
+        userId = "61460a3874cd146ed0b3499f";
     }
-
 
     useEffect(async () => {
         try {
             const data = await request(`/api/profile/profile/` + userId, 'GET');
-            console.log('Data', data);
+            console.log('Data1', data);
             props.setUserProfile(data);
         } catch (e) {
 
         }
-    }, [])
-    debugger;
+    }, [userId])
+  debugger; 
     return (
         <>
-            <Profile state={props.state} dispatch={props.dispatch} profile={props.profile} />
+            {
+                <Profile state={props.state} dispatch={props.dispatch} profile={props.profile} />
+            }
         </>
     )
 }
 
 let mapStateToProps = (state) => ({
-    profile: state.profilePage.profile
+    profile: state.profilePage.profile,
+    //isAuth: state.auth.isAuth
 });
 
-let WithURLDataContainerComponent = withRouter (ProfileContainer);
+let WithURLDataContainerComponent = withRouter(ProfileContainer);
 
 export default connect(mapStateToProps, { setUserProfile })(WithURLDataContainerComponent);

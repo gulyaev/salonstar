@@ -4,9 +4,11 @@ const {Types} = require('mongoose');
 
 const UserSchema = new Schema({
     email: {type: String, required: 'false', unique: 'true'},
+    login: {type: String, required: 'false', unique: 'true'},
     password: {type: String, required: 'false'},
     isAdmin: {type: Boolean, default: false},
-    adminCode: {type: String, required: 'false'}
+    adminCode: {type: String, required: false},
+    //followed: {type: Boolean, default: false}
     //name: {type: String, required: 'false'},
     //profession: {type: String, required: 'false'},
     //description: {type: String, required: 'false'},

@@ -3,7 +3,7 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import LinksPage from '../src/pages/LinksPage';
 import CreatePage from '../src/pages/CreatePage';
 import DetailPage from '../src/pages/DetailPage';
-import AuthPage from '../src/pages/AuthPage';
+import AuthPageContainer from '../src/pages/AuthPageContainer';
 import ProfileContainer from './pages/Profile/ProfileContainer';
 import Vacancies from './pages/Vacancies';
 import Courses from './pages/Courses';
@@ -23,9 +23,7 @@ export const useRoutes = (isAuthenticated, props) => {
                 <Route path="/detail/:id">
                     <DetailPage />
                 </Route>
-                <Route path="/profile/:userId?">
-                    <ProfileContainer state={props.state} dispatch={props.dispatch} />
-                </Route>
+                <Route path="/profile/:userId?"><ProfileContainer state={props.state} dispatch={props.dispatch} /></Route>
                 <Route path="/dialogs">
                     <DialogsContainer state={props.state} dispatch={props.dispatch} />
                 </Route>
@@ -38,14 +36,14 @@ export const useRoutes = (isAuthenticated, props) => {
                 <Route path="/users">
                     <UsersContainer state={props.state} dispatch={props.dispatch}/>
                 </Route>
-                <Redirect to='/create' />
+                <Redirect to='/profile' />
             </Switch>
         )
     }
     return (
         <Switch>
             <Route path="/" exact>
-                <AuthPage />
+                <AuthPageContainer />
             </Route>
             <Route path="/users">
                 <UsersContainer />
@@ -53,5 +51,4 @@ export const useRoutes = (isAuthenticated, props) => {
             <Redirect to="/" />
         </Switch>
     )
-
 }

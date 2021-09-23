@@ -11,7 +11,7 @@ const LinksPage = () => {
 
     const fetchLinks = useCallback(async () => {
         try {
-            debugger;
+            //debugger;
             const fetched = await request('/api/link', 'GET', null, {
                 Authorization: `Bearer ${token}`
             });
@@ -27,7 +27,7 @@ const LinksPage = () => {
     if (loading) {
         return <Loader />
     }
-    debugger;
+    //debugger;
     return (
         
             <div>
