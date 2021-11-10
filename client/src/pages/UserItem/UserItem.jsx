@@ -46,7 +46,7 @@ const UserItem = (props) => {
         //alert("Клик по юзеру");
         try {
             alert("Начало");
-            const data = await request(`/api/profile/profile/6105c18e95861e1ac17cbef9`, 'GET');
+            const data = await request(`/api/profile/profile/618a239e81d859067dee8893`, 'GET');
             console.log('Data', data);
             //message(data.message);
             alert("Конец");

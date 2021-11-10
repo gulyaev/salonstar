@@ -18,7 +18,10 @@ export const useAuth = () => {
         //console.log('from auth.hook.js ' + userEmail)
         //console.log('from auth.hook.js ' + userLogin)
         localStorage.setItem(storageName, JSON.stringify({
-            userId: id, token: jwtToken, userEmail: email, userLogin: login
+            userId: id, 
+            token: jwtToken, 
+            userEmail: email, 
+            userLogin: login
         }))
     }, [])
 

@@ -4,6 +4,7 @@ import { setAuthUserData } from '../redux/auth-reducer';
 import { connect } from "react-redux";
 import { useHttp } from '../hooks/http.hook';
 import { useMessage } from '../hooks/message.hook';
+import { Redirect } from 'react-router-dom';
 
 function NavbarTopContainer(props) {
     const message = useMessage();
@@ -11,16 +12,24 @@ function NavbarTopContainer(props) {
     
     useEffect(async () => {
         console.log('Загрузился Топ');
-        const userDataStorage = JSON.parse(localStorage.getItem('userData'));//определен айди и токен
-        const userId = userDataStorage.userId;//достаем айдишник
-        
-        try {
-            const data = await request('/api/auth/me', 'POST', {userId});
-            message(data.message);
-            props.setAuthUserData(data.userId, data.userEmail, data.userLogin, data.isAdmin);
-        } catch (e) {
-            
-        }
+
+        const userDataStorage = localStorage.getItem('userData');
+
+        console.log("userDataStorage from top " + userDataStorage);
+
+        if( !userDataStorage ) return <Redirect to={'/login'}/>;
+
+        const userDataStorageParsed = JSON.parse(localStorage.getItem('userData'));//определен айди 
+        const userId = userDataStorageParsed.userId;//достаем айдишник
+        console.log("userId from top " + userId);
+
+            try {
+                const data = await request('/api/auth/me', 'POST', {userId});
+                message(data.message);
+                props.setAuthUserData(data.userId, data.userEmail, data.userLogin, data.isAdmin, data.isAuth);
+            } catch (e) {
+                
+            }     
     }, [localStorage])
 
     return (

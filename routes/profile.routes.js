@@ -83,7 +83,7 @@ router.get('/profile/', async (req, res) => {
 router.get('/profile/:id', async (req, res) => {
   try {
     const user = await Users.findById(req.params.id);
-    
+    console.log('req.body-profile-routes', user);
     //if (!user) throw Error('No items');
     //res.send('Okh');  
     res.status(200).json(user);

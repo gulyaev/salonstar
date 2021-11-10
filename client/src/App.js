@@ -11,8 +11,9 @@ import NavbarTopContainer from './components/NavbarTopContainer';
 
 
 const App = (props) => {
+  //кидаем на весь проект хук auth.hook.js и достаем оттуда готовые параметры со значениями
   const { token, login, logout, userId, userEmail, userLogin, ready } = useAuth(); //auth.hook.js
-  const isAuthenticated = !!token;
+  const isAuthenticated = !!token;//превращает значение в boolean - здесь true
   const routes = useRoutes(isAuthenticated, props);
 
   //For workinh of dropdown menu
@@ -23,26 +24,32 @@ const App = (props) => {
   });
   //debugger;
 
+  //ready - значение из хука useAuth которое устанавливается когда происходит автоматический логин из значений localStorage
   if (!ready) {
     return <Loader />
   }
 
   return (
+    //теперь кидаем на все компоненты контекст с переменными из хука useAuth
     <AuthContext.Provider value={{
-      token, login, logout, userId, userEmail, userLogin, isAuthenticated
+      token, login, logout, userId, userEmail, userLogin, ready, isAuthenticated
     }}>
       <Router>
         <div className={"container"}>
           <NavbarTopContainer />
           <div class="row">
-            {isAuthenticated && <NavBarAside />}
-            <div class="col s9 l9">
+            {//isAuthenticated && <NavBarAside />
+            }
+            {//<div class="col s9 l9">
+              }
+            
               {routes
               }
               {
                 //<useRoutes isAuthenticated={isAuthenticated}/>
               }
-            </div>
+            {//</div>
+            }
           </div>
         </div>
       </Router>

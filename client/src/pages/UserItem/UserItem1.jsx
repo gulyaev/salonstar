@@ -51,7 +51,7 @@ const UserItem1 = (props) => {
 
         }
     }
-
+    //debugger;
     return (
         <>
             <ListItem alignItems="flex-start">
@@ -59,7 +59,7 @@ const UserItem1 = (props) => {
                     <NavLink to={"/profile/" + props.id} onClick={clickUserHandler}><Avatar alt="Remy Sharp" src={props.image} /></NavLink>
                 </ListItemAvatar>
                 <ListItemText
-                    primary={props.name}
+                    primary={props.login}
                     secondary={
                         <React.Fragment>
                             <Typography

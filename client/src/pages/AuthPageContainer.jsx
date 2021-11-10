@@ -37,12 +37,12 @@ function AuthPageContainer (props) {
     const registerHandler = async () => {
         try {
             const data = await request('/api/auth/register', 'POST', { ...form });
-            console.log('Data', data);
+            console.log('RegisterData', data);
             message(data.message);
-            console.log('токен' + data.token + 'айди' + data.userId + 'майл' + data.userEmail + 'логин' + data.userLogin)
+            console.log('токен' + data.token + 'айди' + data.userId + 'майл' + data.userEmail + 'логин' + data.userLogin + ' админ' + data.currentUser + ' авторизован' + data.isAuth)
             auth.login(data.token, data.userId, data.userEmail, data.userLogin);
             //console.log('auth.userEmail', auth.userEmail);
-            //setAuthUserData(data.userId, data.email, data.login);
+            //setAuthUserData(data.userId, data.userEmail, data.userLogin, data.currentUser, data.isAuth);
         } catch (e) {
             
         }
@@ -51,7 +51,7 @@ function AuthPageContainer (props) {
     const loginHandler = async () => {
             try {
                 const data = await request('/api/auth/login', 'POST', { ...form });
-                console.log('Data', data);
+                console.log('LoginData', data);
                 message(data.message);
                 auth.login(data.token, data.userId, data.userEmail, data.userLogin);
                 //setAuthUserData(data.userId, data.email, data.login)

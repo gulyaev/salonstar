@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useEffect, useContext } from "react";
 import s from './Dialogs.module.css';
 import DialogItem from "./DialogItem/DialogItem";
 import Message from "./Message/Message";
 import { Redirect } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
+import Loader from '../../components/Loader';
 
 const Dialogs = (props) => {
+    const auth = useContext(AuthContext);
+
+    //debugger;
     let dialogsElements = props.state.dialogsPage.dialogsData.map(dialog => (<DialogItem name={dialog.name} id={dialog.id} image={dialog.image}/>));
     let messagesElements = props.state.dialogsPage.messagesData.map(message => (<Message name={message.name} message={message.message} id={message.id} />));
 
@@ -19,9 +24,14 @@ const Dialogs = (props) => {
         let text = newMessageElement.current.value;
         props.onMessageChange(text);
     }
-
+    //alert(props.isAuth);
     //if (!props.isAuth) return <Redirect to={'/login'}/>;
-
+    useEffect(async() => {
+        if (!auth.ready) {
+            return <Loader />
+        }
+    })
+    
     return (
         <>
             <div class="col s4">

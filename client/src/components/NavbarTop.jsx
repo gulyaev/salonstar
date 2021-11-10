@@ -30,7 +30,7 @@ const NavbarTop = (props) => {
                 <li><a href="#!">Управление вакансиями</a></li>
                 <li><a href="#!">Опубликовать вакансию</a></li>
                 <li class="divider"></li>
-                <li><a href="#!">Посмотреть резюме</a></li>
+                <li><NavLink to="/users">Соискатели</NavLink></li>
             </ul>
             <ul id="dropdown2" class="dropdown-content">
                 <li><a href="#!">Мои резюме</a></li>

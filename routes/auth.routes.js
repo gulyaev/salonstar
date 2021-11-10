@@ -1,17 +1,32 @@
-const { Router } = require('express')
-const bcrypt = require('bcryptjs')
-const config = require('config')
-const jwt = require('jsonwebtoken')
-const { check, validationResult } = require('express-validator')
+const { Router } = require('express');
+const bcrypt = require('bcryptjs');
+const config = require('config');
+const jwt = require('jsonwebtoken');
+const { check, validationResult } = require('express-validator');
 const Users = require('../models/Users');
 const router = Router();
 const mongoose = require('mongoose');
 var bodyParser = require('body-parser');
-var jsonParser = bodyParser.json();
+const requireLogin = require('../middleware/requireLogin');
+const express = require('express');
 
-router.get('/test', jsonParser, (req, res) => {
-  console.log('req.body', req.body.todo);
-  res.send('Okh');
+
+router.get('/protected', requireLogin, async (req, res) => {
+  await console.log('req.user2 ', req.user);
+  //res.send('req.user ', req.user);
+  //res.send("f");
+  
+  /*
+  res.json({
+    id: req.user.id,               // you tell typescript that req.user for sure not. null
+  });
+  */
+  
+})
+
+router.get('/test', (req, res) => {
+  console.log('req.body', req.body);
+  res.send("from test");
 })
 
 // /api/auth/register
@@ -78,7 +93,7 @@ router.post(
         { expiresIn: '1h' }
       );
 
-      res.status(201).json({ message: 'Пользователь создан', currentUser: user.isAdmin, token: token, userId: user.id, userEmail: user.email, userLogin: user.login });
+      res.status(201).json({ message: 'Пользователь создан', currentUser: user.isAdmin, token: token, userId: user.id, userEmail: user.email, userLogin: user.login, isAuth: true });
 
     } catch (e) {
       res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' })
@@ -144,12 +159,11 @@ router.post('/me', async (req, res) => {
       return res.status(400).json({ message: 'Пользователь не найден' });
     }
 
-    res.json({ userId: user.id, userEmail: user.email, userLogin: user.login, message: 'Вы авторизованы в системе', isAdmin: user.isAdmin });
+    res.json({ userId: user.id, userEmail: user.email, userLogin: user.login, message: 'Вы авторизованы в системе', isAdmin: user.isAdmin, isAuth: true });
 
   } catch (e) {
     res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' });
   }
-
 });
 
 module.exports = router;

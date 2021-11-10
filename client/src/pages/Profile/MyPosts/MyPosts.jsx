@@ -19,22 +19,23 @@ const MyPosts = (props) => {
 
     return (
         <div className={s.postsBlock}>
-            <h4>Мои посты</h4>
             <div>
                 <div>
-                    <div class="row">
+                    <div class="">
                         <form class="col s12">
-                            <div class="row">
+                            <div class="">
                                 <div class="input-field col s12">
                                     <textarea onChange={onPostChange} ref={newPostElement} id="textarea1" class="materialize-textarea" value={props.state.profilePage.newPostText} ></textarea>
-                                    <label for="textarea1">Что у вас нового ?</label>
+                                    <label for="textarea1">Отправить сообщение {props.profile.login}</label>
                                 </div>
                             </div>
                         </form>
                     </div>
                 </div>
                 <div>
-                    <button class="waves-effect waves-light btn" onClick={addPost}>Опубликовать на стене</button>
+                    <button class="waves-effect waves-light btn" onClick={addPost}>Отправить сообщение
+                    <i class="material-icons right">send</i>
+                    </button>
                 </div>
             </div>
             <div className={s.posts}>

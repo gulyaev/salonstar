@@ -1,6 +1,8 @@
 const ADD_POST = 'ADD-POST';
 const ON_POST_CHANGE = 'ON-POST-CHANGE';
 const SET_USER_PROFILE = 'SET-USER-PROFILE';
+const UPDATE_USER_PROFILE = 'UPDATE-USER-PROFILE';
+const TOGGLE_IS_FOLLOWING_PROGRESS = 'TOGGLE-IS-FOLLOWING-PROGRESS';
 
 let initialState = {
   postData: [
@@ -8,7 +10,8 @@ let initialState = {
     { id: 2, message: 'It is my first post', likesCount: 35 }
   ],
   newPostText: '',
-  profile: null
+  profile: null,
+  followingInProgress: false
 };
 
 const profileReducer = (state = initialState, action) => {
@@ -36,7 +39,20 @@ const profileReducer = (state = initialState, action) => {
     case SET_USER_PROFILE: {
       return { ...state, profile: action.profile }
     }
-
+    case UPDATE_USER_PROFILE: {
+      return {
+        ...state,
+        ...state.profile,
+        followers: action.profile.followers,
+        following: action.profile.following
+      }
+    }
+    case TOGGLE_IS_FOLLOWING_PROGRESS: {
+      return { 
+        ...state, 
+        followingInProgress: action.isFetching 
+      }
+    }
     default:
       return state;
   }
@@ -46,5 +62,7 @@ const profileReducer = (state = initialState, action) => {
 export const addPostActionCreator = () => ({ type: ADD_POST });
 export const onPostChangeActionCreator = (text) => ({ type: ON_POST_CHANGE, newText: text });
 export const setUserProfile = (profile) => ({ type: SET_USER_PROFILE, profile });
+export const updateUserProfile = (profile) => ({ type: UPDATE_USER_PROFILE, profile });
+export const toggleFollowingProgress = (isFetching) => ({ type: TOGGLE_IS_FOLLOWING_PROGRESS, isFetching: isFetching });
 
 export default profileReducer;

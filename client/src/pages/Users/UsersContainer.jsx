@@ -2,10 +2,9 @@ import React from 'react';
 import {
     follow,
     unfollow,
-    setUsers,
     setCurrentPage,
-    setTotalUsersCount,
-    toggleIsFetching
+    getUsersThunkCreator,
+    onPageChangedThunkCreator
 } from '../../redux/users-reducer';
 import UserItem1 from "../UserItem/UserItem1";
 import Users from "./Users";
@@ -15,34 +14,18 @@ const axios = require('axios').default;
 function UsersContainer(props) {
 
     let onPageChanged = (pageNumber) => {
-        props.setCurrentPage(pageNumber);
-        props.toggleIsFetching(true);
-        axios.get(`/api/users/getusers?page=${pageNumber}&limit=${props.pageSize}`)
-            .then(res => {
-                props.toggleIsFetching(false);
-                props.setUsers(res.data.results);
-            });
-    }
+            props.onPageChangedThunkCreator(pageNumber, props.pageSize);
+    };
 
     let getUsers = () => {
         if (props.usersData.length === 0) {
-            props.toggleIsFetching(true);
-            axios.get(`/api/users/getusers?page=${props.currentPage}&limit=${props.pageSize}`)
-                .then(res => {
-                    props.toggleIsFetching(false);
-                    console.log(res.data);
-                    //props.setUsers(res.data.results);
-                    props.setTotalUsersCount(res.data.totalCount);
-                    props.setUsers(res.data.results);
-                })
-                .catch(err => {
-                    //Handle Error Here
-                    console.error(err);
-                });
+            props.getUsersThunkCreator(props.currentPage, props.pageSize);
         }
     };
 
-    let usersElements = props.state.usersPage.usersData.map(user => (<UserItem1 name={user.name} id={user._id} image={user.userImage} followed={true}/>));
+    //debugger;
+
+    let usersElements = props.state.usersPage.usersData.map(user => (<UserItem1 name={user.name} login={user.login} id={user._id} image={user.userImage} followed={true} />));
     let pagesCount = Math.ceil(props.state.usersPage.totalUsersCount / props.state.usersPage.pageSize);
 
     let pages = [];
@@ -50,7 +33,7 @@ function UsersContainer(props) {
         pages.push(i);
     }
 
-    //debugger;
+    
 
     return (
         <Users getUsers={getUsers} onPageChanged={onPageChanged} pages={pages} usersElements={usersElements} currentPage={props.currentPage} />
@@ -59,6 +42,7 @@ function UsersContainer(props) {
 
 let mapStateToProps = (state) => {
     return {
+        //usersPage: state.usersPage,
         usersData: state.usersPage.usersData,
         pageSize: state.usersPage.pageSize,
         totalUsersCount: state.usersPage.totalUsersCount,
@@ -67,4 +51,10 @@ let mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, { follow, unfollow, setUsers, setCurrentPage, setTotalUsersCount, toggleIsFetching })(UsersContainer);
+export default connect(mapStateToProps, {
+    follow,
+    unfollow,
+    setCurrentPage,
+    getUsersThunkCreator,
+    onPageChangedThunkCreator
+})(UsersContainer);

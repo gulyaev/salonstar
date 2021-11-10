@@ -4,6 +4,7 @@ const Users = require('../models/Users');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const mongoose = require('mongoose');
+const requireLogin = require('../middleware/requireLogin');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -28,26 +29,10 @@ router.get('/getusers', async (req, res) => {
     const endIndex = page * limit;
 
     const users = await Users.find()
-      .select("_id email name userImage")
+      .select("_id email login")
+      //.select("_id email name userImage")
       .exec()
-    /*
-    .then(docs=>{
-     console.log(docs);
-         const response = {
-           users: docs.map(doc=>{
-             return {
-               _id: doc._id,
-               name: doc.name,
-               userImage: doc.userImage,
-               request: {
-                 type: "GET",
-                 url: "http://127.0.0.1:5000/api/users/getusers" + doc._id
-               }
-             }
-           })
-         } 
-     });  
-    */
+      
     const results = {}
 
     if (endIndex < users.length) {
@@ -140,6 +125,65 @@ router.patch('/updateuser/:id', async (req, res) => {
   } catch (err) {
     res.status(400).json({ msg: err });
   }
+});
+
+/*
+router.put('/follow', requireLogin, (req, res) => {
+   Users.findByIdAndUpdate(req.body.followId, {
+    $push: {followers: req.user._id}
+    },{
+      new: true
+    }, (err, result) => {
+      if (err) {
+        return res.status(422).json({error: err})
+      }
+      Users.findByIdAndUpdate(req.user._id, {
+        $push: {following: req.body.followId},
+      }, {new: true}).then(result => {
+        res.json(result)
+      }).catch(err=>{
+        return res.status(422).json({error: err})
+      });
+    });
+});
+*/
+
+router.put('/follow', requireLogin, (req, res) => {
+  Users.findByIdAndUpdate(req.user._id, {
+   $push: {following: req.body.followId}
+   },{
+     new: true
+   }, (err, result) => {
+     if (err) {
+       return res.status(422).json({error: err})
+     }
+     Users.findByIdAndUpdate(req.body.followId, {
+       $push: {followers: req.user._id},
+     }, {new: true}).select("-password").then(result => {
+       res.json(result)
+     }).catch(err=>{
+       return res.status(422).json({error: err})
+     });
+   });
+});
+
+router.put('/unfollow', requireLogin, async (req, res) => {
+  await Users.findByIdAndUpdate(req.body.unfollowId, {
+    $pull: {followers: req.user._id}
+    },{
+      new: true
+    }, (err, result) => {
+      if (err) {
+        return res.status(422).json({error: err})
+      }
+      Users.findByIdAndUpdate(req.user._id, {
+        $pull: {following: req.body.unfollowId},
+      }, {new: true}).select("-password").then(result => {
+        res.json(result)
+      }).catch(err=>{
+        return res.status(422).json({error: err})
+      });
+    }); 
 });
 
 module.exports = router;

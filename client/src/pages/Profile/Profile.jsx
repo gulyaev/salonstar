@@ -5,16 +5,22 @@ import { Redirect } from 'react-router-dom';
 import Loader from "../../components/Loader";
 
 const Profile = (props) => {
-  //if (!props.isAuth) return <Redirect to={'/login'} />;
+
 
     if (!props.profile) {
         return <Loader />
     }
-
+    //alert(props.isAuth);
+    //debugger;
+    //if (props.isAuth === false) return <Redirect to={'/login'} />;
+    
     return (
         <>
 
-            <ProfileInfo profile={props.profile} />
+            <ProfileInfo profile={props.profile} followUser={props.followUser}
+                userProfile={props.userProfile}
+                userId={props.userId}
+            />
             <MyPostsContainer state={props.state} dispatch={props.dispatch} />
         </>
     )

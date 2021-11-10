@@ -9,6 +9,9 @@ import Vacancies from './pages/Vacancies';
 import Courses from './pages/Courses';
 import DialogsContainer from './pages/Dialogs/DialogsContainer';
 import UsersContainer from './pages/Users/UsersContainer';
+import TestPage from './pages/Test/TestPage.jsx';
+import MyProfile from './pages/Profile/MyProfile.jsx';
+import Grid from './pages/Grid/Grid.jsx';
 
 export const useRoutes = (isAuthenticated, props) => {
     if (isAuthenticated) {
@@ -36,7 +39,15 @@ export const useRoutes = (isAuthenticated, props) => {
                 <Route path="/users">
                     <UsersContainer state={props.state} dispatch={props.dispatch}/>
                 </Route>
-                <Redirect to='/profile' />
+                <Route path="/test">
+                    <TestPage />
+                </Route>
+                <Route path="/myprofile">
+                    <MyProfile />
+                </Route>
+                <Route path="/grid">
+                    <Grid />
+                </Route>
             </Switch>
         )
     }
