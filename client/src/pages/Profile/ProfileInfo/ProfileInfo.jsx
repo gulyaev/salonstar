@@ -2,6 +2,10 @@ import React from 'react';
 import ImageAvatars from '../Avatar/ImageAvatars';
 import Loader from "../../../components/Loader";
 import { makeStyles } from '@material-ui/core/styles';
+import ProfileAbout from "./ProfileAbout";
+import ProfilePersonalInfo from "./ProfilePersonalInfo";
+import ProfileInterests from "./ProfileInterests";
+
 
 const useStyles = makeStyles((theme) => ({
     imageLogin: {
@@ -53,7 +57,7 @@ const ProfileInfo = (props) => {
     if (!props.profile) {
         return <Loader />
     }
-//debugger;
+    //debugger;
     return (
         <>
             <div class="col s12 m8 offset-m2 l12 ">
@@ -75,14 +79,10 @@ const ProfileInfo = (props) => {
                         <button class="btn-small waves-effect waves-light" type="submit" name="action" onClick={props.followUser}>Подписаться
                             <i class="material-icons right">send</i>
                         </button>
-                        <div className={classes.aboutMe}>ОБО МНЕ</div>
-                        <p>This is a square image. Add the "circle" class to it to make it appear circular.</p>
 
-                        <div className={classes.aboutMe}>ПЕРСОНАЛЬНАЯ ИНФОРМАЦИЯ</div>
-                        <p>This is a square image. Add the "circle" class to it to make it appear circular.</p>
-
-                        <div className={classes.aboutMe}>ИНТЕРЕСЫ</div>
-                        <p>This is a square image. Add the "circle" class to it to make it appear circular.</p>
+                        <ProfileAbout aboutMe={'Обо мне информация'}/>
+                        <ProfilePersonalInfo personalInfo={'Персональная информация'}/>
+                        <ProfileInterests interests={'Интересы'}/>
                     </div>
                 </div>
             </div>
