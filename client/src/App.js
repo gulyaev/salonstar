@@ -16,7 +16,7 @@ const App = (props) => {
   const isAuthenticated = !!token;//превращает значение в boolean - здесь true
   const routes = useRoutes(isAuthenticated, props);
 
-  //For workinh of dropdown menu
+  //For working of dropdown menu
   useEffect(() => {
     let elems = document.querySelectorAll('.dropdown-trigger');
     //elems.dropdown();

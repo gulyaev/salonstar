@@ -19,6 +19,7 @@ const LinksList = ({ links }) => {
                     </tr>
                 </thead>
                 <tbody>
+
                     {links.map((link, index) => {
                         return (
                             <tr key={link._id}>
@@ -31,6 +32,7 @@ const LinksList = ({ links }) => {
                             </tr>
                         )
                     })}
+                    
                 </tbody>
             </table>
         </div>

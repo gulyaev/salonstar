@@ -7,7 +7,6 @@ const bodyParser = require('body-parser');
 // /api/posts/createpost
 //create a post
 router.post ('/createpost', async (req, res) => {
-  //console.log('req.body', req.body);
   const newPost = new Posts(req.body);
 
   try {
@@ -68,6 +67,7 @@ router.get ('/getposts/:id', async (req, res) => {
 // update a post
 router.patch ('/updatepost/:id', async (req, res) => {
   try {
+    console.log("hello")
     const post = await Posts.findByIdAndUpdate(req.params.id, req.body);
     if (!post) throw Error('Something went wrong while updating the post');
     res.status(200).json({success: true});

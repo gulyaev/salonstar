@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext, useCallback, useMemo } from "react";
-import { setUserProfile, updateUserProfile } from '../../redux/profile-reducer';
+import React, { useState, useEffect, useContext } from "react";
+import { setUserProfile, updateUserProfile, setUserResumeData } from '../../redux/profile-reducer';
 import { connect } from "react-redux";
 import { withRouter } from 'react-router-dom';
 import Profile from "./Profile";
@@ -11,72 +11,106 @@ import { withAuthRedirect } from "../../hoc/WithAuthRedirect";
 import { compose } from "redux";
 
 const ProfileContainer = (props) => {
+    const { token } = useContext(AuthContext);
+    const auth = useContext(AuthContext);
     const message = useMessage();
     const { loading, request, error, clearError } = useHttp();
-    const auth = useContext(AuthContext);
     const [userProfile, setProfile] = useState();
 
+    const globalStorage = JSON.parse(localStorage.getItem('userData'));//определен айди и токен когда авторизован
 
-    const globalStorage = JSON.parse(localStorage.getItem('userData'));//определен айди и токен
+    let userId = props.match.params.userId;//определен когда есть id в URI - переход от списка пользователей
+    console.log("userIdfromURLProfCont " + userId); //определен когда есть id в URI - переход от списка пользователей
 
-    let userId = props.match.params.userId;
-    console.log("userId " + userId);
-
-/*
     useEffect(
         async () => {
             if (!auth.ready) {
                 return <Loader />
             }
 
-            const authUserId = globalStorage.userId;
+            const authUserId = globalStorage.userId;//определен айди когда авторизован
 
             if (!userId) {
-                userId = authUserId;
+                userId = authUserId; //если нет id из урла, то берем id из локалсторидж
             }
 
             try {
+                console.log("userIdfromProfCont " + userId); //id из URI либо из Локалсторидж
                 const data = await request(`/api/profile/profile/` + userId, 'GET');
-                console.log('Data1', data);
-                //props.setUserProfile(data);
+                console.log('userProfileData', data);
+                props.setUserProfile(data);
                 setProfile(data);
-                console.log('Data3', userProfile);
+                console.log('userProfileDataUseState', userProfile);
             } catch (e) {
 
             }
-        }, [request])
-*/
+        }, [request, userId])
 
+    let getUserResumeData = async () => {
+        if (!userId) {
+            try {
+                console.log("userIdfromProfileContainerResumeData " + userId); //id из URI либо из Локалсторидж
+                //получение резюме из БД резюме по авторизованому пользователю
+                const resumeData = await request('/api/profile/getprofileinfo', 'GET', null, {
+                    Authorization: `Bearer ${token}`
+                });
+                console.log('ResumeData', resumeData);
+                props.setUserResumeData(resumeData);
+            } catch (e) {
 
-        const funcTion = useCallback(async () => {
-           
-            const data = await request(`/api/profile/profile/` + userId, 'GET');
-            console.log('Data1', data);
-            props.setUserProfile(data);
-            
-            setProfile(data);
-            console.log('Data2', userProfile);
-            //props.setUserProfile(userProfile);
-        }, [userId]);
-    
-    
-        useEffect(async() => {
-            if (!auth.ready) {
-                return <Loader />
             }
-        
-            const authUserId = globalStorage.userId;
-        
-            if (!userId) {
-                userId = authUserId;
+        } else {
+            try {
+                console.log("userIdfromProfileContainerResumeDataFromURL " + userId); //id из URL
+                //получение резюме из БД резюме по id пользователя из URL
+                const resumeData = await request(`/api/profile/getprofileinfo/` + userId, 'GET');
+                console.log('ResumeData', resumeData);
+                props.setUserResumeData(resumeData);
+            } catch (e) {
+
             }
+        }
+    };
 
-            funcTion();
-    
-            //setProfile(funcTion());
-            //console.log('Data3', userProfile);
-        }, [funcTion])
+    let updateUserResumeData = async (profileAbout = props.resume[0].about, profilePersonalInfo = props.resume[0].personalinfo, profileInterests = props.resume[0].interests) => {
+        if (!userId) {
+            try {
+                console.log("userIdfromProfileContainerResumeData " + userId); //id из Локалсторидж
+                //получение резюме из БД резюме по авторизованому пользователю
+                const resumeData = await request(`/api/profile/updateprofileinfo/` + userId, 'PATCH',
+                    {
+                        "about": profileAbout,
+                        "personalinfo": profilePersonalInfo,
+                        "interests": profileInterests
+                    },
+                    {
+                        'Content-Type': 'application/json'
+                    });
+                console.log('UpdatedResumeData', resumeData);
+                props.setUserResumeData(resumeData);
+            } catch (e) {
 
+            }
+        } else {
+            try {
+                console.log("userIdfromProfileContainerResumeDataFromURL " + userId); //id из URL
+                //получение резюме из БД резюме по id пользователя из URL
+                const resumeData = await request(`/api/profile/updateprofileinfo/` + userId, 'PATCH', 
+                {
+                    "about": profileAbout,
+                    "personalinfo": profilePersonalInfo,
+                    "interests": profileInterests
+                },
+                {
+                    'Content-Type': 'application/json'
+                });
+                console.log('UpdatedResumeData', resumeData);
+                props.setUserResumeData(resumeData);
+            } catch (e) {
+
+            }
+        }
+    };
 
     const followUser = () => {
         const authToken = globalStorage.token;
@@ -109,33 +143,36 @@ const ProfileContainer = (props) => {
                 console.log("userProfile3234 " + userProfile);
             });
     }
-    //debugger;
+
+
     return (
         <>
             {
-                
+
                 <Profile
                     state={props.state}
                     dispatch={props.dispatch}
                     profile={props.profile}
+                    getUserResumeData={getUserResumeData}
+                    updateUserResumeData={updateUserResumeData}
                     followUser={followUser}
                     userProfile={userProfile}
-                    userId={userId}
                     isAuth={props.isAuth}
+                    resume={props.resume}
+                    loading={props.loading}
                 />
-                
-               
             }
         </>
     )
 }
 
 let mapStateToProps = (state) => ({
-    profile: state.profilePage.profile
+    profile: state.profilePage.profile,
+    resume: state.profilePage.resume
 });
 
 export default compose(
-    connect(mapStateToProps, { setUserProfile, updateUserProfile }),
+    connect(mapStateToProps, { setUserProfile, updateUserProfile, setUserResumeData }),
     withRouter,
     withAuthRedirect
 )(ProfileContainer);

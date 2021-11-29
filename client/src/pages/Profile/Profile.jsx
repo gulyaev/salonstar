@@ -17,9 +17,14 @@ const Profile = (props) => {
     return (
         <>
 
-            <ProfileInfo profile={props.profile} followUser={props.followUser}
+            <ProfileInfo 
+                profile={props.profile} 
+                followUser={props.followUser} 
+                getUserResumeData={props.getUserResumeData}
+                updateUserResumeData={props.updateUserResumeData}
                 userProfile={props.userProfile}
-                userId={props.userId}
+                resume={props.resume}
+                loading={props.loading}
             />
             <MyPostsContainer state={props.state} dispatch={props.dispatch} />
         </>

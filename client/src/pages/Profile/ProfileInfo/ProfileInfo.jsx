@@ -2,10 +2,8 @@ import React from 'react';
 import ImageAvatars from '../Avatar/ImageAvatars';
 import Loader from "../../../components/Loader";
 import { makeStyles } from '@material-ui/core/styles';
-import ProfileAbout from "./ProfileAbout";
-import ProfilePersonalInfo from "./ProfilePersonalInfo";
-import ProfileInterests from "./ProfileInterests";
-
+import { Link } from "react-router-dom";
+import ResumeContainer from '../../../components/ResumeContainer';
 
 const useStyles = makeStyles((theme) => ({
     imageLogin: {
@@ -39,6 +37,9 @@ const useStyles = makeStyles((theme) => ({
         width: '45%',
         marginBottom: '25px'
     },
+    butTon: {
+        margin: '18px 0px'
+    },
     gallery: {
         display: 'flex',
         flexWrap: 'wrap',
@@ -57,6 +58,8 @@ const ProfileInfo = (props) => {
     if (!props.profile) {
         return <Loader />
     }
+
+
     //debugger;
     return (
         <>
@@ -76,13 +79,17 @@ const ProfileInfo = (props) => {
                                 <h6>{props.profile.following.length} following</h6>
                             </div>
                         </div>
-                        <button class="btn-small waves-effect waves-light" type="submit" name="action" onClick={props.followUser}>Подписаться
-                            <i class="material-icons right">send</i>
-                        </button>
-
-                        <ProfileAbout aboutMe={'Обо мне информация'}/>
-                        <ProfilePersonalInfo personalInfo={'Персональная информация'}/>
-                        <ProfileInterests interests={'Интересы'}/>
+                        <div className={classes.butTon}>
+                            <button class="btn-small waves-effect waves-light" type="submit" name="action" onClick={props.followUser}>Подписаться
+                                <i class="material-icons right">send</i>
+                            </button>
+                        </div>
+                        <div>
+                            <button class="btn-small waves-effect waves-light" type="submit" name="action" onClick={props.getUserResumeData}>Показать резюме
+                                <i class="material-icons right">send</i>
+                            </button>
+                        </div>
+                        <ResumeContainer resume={props.resume} updateUserResumeData={props.updateUserResumeData} getUserResumeData={props.getUserResumeData} />
                     </div>
                 </div>
             </div>

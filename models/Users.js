@@ -10,7 +10,8 @@ const UserSchema = new Schema({
     isAdmin: {type: Boolean, default: false},
     adminCode: {type: String, required: false},
     followers: [{type: Types.ObjectId, ref: 'Users'}],
-    following: [{type: Types.ObjectId, ref: 'Users'}]
+    following: [{type: Types.ObjectId, ref: 'Users'}],
+    profileinfo: [{type: Types.ObjectId, ref:'Profileinfo'}],
     //followed: {type: Boolean, default: false}
     //name: {type: String, required: 'false'},
     //profession: {type: String, required: 'false'},

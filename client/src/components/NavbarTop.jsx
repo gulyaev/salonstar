@@ -21,8 +21,8 @@ const NavbarTop = (props) => {
     return (
         <>
             {props.isAdmin
-                    ? <div class="card-panel teal lighten-2">Вы авторизованы как администратор. Добро пожаловать, {props.login} </div>
-                    : <div class="card-panel teal lighten-2">Вы успешно вошли. Добро пожаловать, {props.login}</div>
+                ? <div class="card-panel teal lighten-2">Вы авторизованы как администратор. Добро пожаловать, {props.login} </div>
+                : <div class="card-panel teal lighten-2">Вы успешно вошли. Добро пожаловать, {props.login}</div>
             }
 
 
@@ -34,14 +34,15 @@ const NavbarTop = (props) => {
             </ul>
             <ul id="dropdown2" class="dropdown-content">
                 <li><a href="#!">Мои резюме</a></li>
-                <li><a href="#!">Опубликовать резюме</a></li>
+                <li><NavLink to="/resume">Опубликовать резюме</NavLink></li>
             </ul>
             <nav>
                 <div class="row teal lighten-2">
                     <div class="nav-wrapper teal lighten-2" >
                         <a href="#!" class="brand-logo col l2 offset-m2 "><i class="material-icons offset-s2">fingerprint</i>Logo</a>
                         <ul class="right hide-on-med-and-down">
-                            <li><NavLink to="/vacancies">Посмотреть вакансии</NavLink></li>
+                            <li><NavLink to="/users">Соискатели</NavLink></li>
+                            <li><NavLink to="/vacancies">Вакансии</NavLink></li>
                             <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Ищу сотрудника<i class="material-icons right">arrow_drop_down</i></a></li>
                             <li><a class="dropdown-trigger" href="#!" data-target="dropdown2">Ищу работу<i class="material-icons right">arrow_drop_down</i></a></li>
                             {

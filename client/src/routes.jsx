@@ -6,6 +6,7 @@ import DetailPage from '../src/pages/DetailPage';
 import AuthPageContainer from '../src/pages/AuthPageContainer';
 import ProfileContainer from './pages/Profile/ProfileContainer';
 import Vacancies from './pages/Vacancies';
+import ResumeContainer from './pages/ResumeContainer';
 import Courses from './pages/Courses';
 import DialogsContainer from './pages/Dialogs/DialogsContainer';
 import UsersContainer from './pages/Users/UsersContainer';
@@ -32,6 +33,9 @@ export const useRoutes = (isAuthenticated, props) => {
                 </Route>
                 <Route path="/vacancies">
                     <Vacancies />
+                </Route>
+                <Route path="/resume">
+                    <ResumeContainer />
                 </Route>
                 <Route path="/courses">
                     <Courses />

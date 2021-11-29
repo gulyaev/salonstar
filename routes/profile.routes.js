@@ -1,9 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const Users = require('../models/Users');
+const Profileinfo = require('../models/Profileinfo');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const mongoose = require('mongoose');
+const auth = require('../middleware/auth.middleware');
+const requireLogin = require('../middleware/requireLogin');
+
+const { ObjectId } = require('mongodb');
+const _id = ObjectId("4eb6e7e7e9b7f4194e000001");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -17,64 +23,11 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.post('/test', (req, res) => {
-  console.log( 'req.body', req.body );
+  console.log('req.body', req.body);
   //res.status(200).json({message:"Successfully Sended"});
   //console.log(res);
   res.send('Okh');
 })
-
-/*
-router.get('/profile/:id', async (req, res) => {
-  //console.log('req.body', req.body);
-  try {
-    //const user = await Users.findById(req.params.id);
-    //res.render("users/show", {user: foundUser});
-    
-    //if (!user) throw Error('No items');
-    //res.status(200).json(user);
-
-    const user = await Users.findById(req.params.id);
-    if (!user ) throw Error('No items');
-    //res.send('Okh');  
-    res.status(200).json(user);
-  } catch (err) {
-    res.status(400).json({ msg: err });
-  }
-});
-*/
-
-// /api/users/getusers
-//get all users
-/*
-router.get('/profile/', async (req, res) => {
-  try { 
-    const users = await Users.find()
-      .select("_id name userImage")
-      .exec()
-    /*
-    .then(docs=>{
-     console.log(docs);
-         const response = {
-           users: docs.map(doc=>{
-             return {
-               _id: doc._id,
-               name: doc.name,
-               userImage: doc.userImage,
-               request: {
-                 type: "GET",
-                 url: "http://127.0.0.1:5000/api/users/getusers" + doc._id
-               }
-             }
-           })
-         } 
-     });  
-    
-
-  } catch (err) {
-    res.status(400).json({ msg: err });
-  }
-});
-*/
 
 // /api/users/getusers/:id
 //get a user
@@ -87,6 +40,58 @@ router.get('/profile/:id', async (req, res) => {
     //if (!user) throw Error('No items');
     //res.send('Okh');  
     res.status(200).json(user);
+  } catch (err) {
+    res.status(400).json({ msg: err });
+  }
+});
+
+router.post('/generateprofileinfo', requireLogin, async (req, res) => {
+  try {
+
+    const { sex, city, about, personalinfo, interests } = req.body
+
+    const profileinfo = new Profileinfo({ sex: sex, city: city, about: about, personalinfo: personalinfo, interests: interests, owner: req.user._id });
+
+    await profileinfo.save();
+
+    res.status(201).json({ message: 'Резюме создано', sex: profileinfo.sex, city: profileinfo.city, about: profileinfo.about, personalinfo: profileinfo.personalinfo, interests: profileinfo.interests, owner: profileinfo.owner });
+
+  } catch (e) {
+    res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' })
+  }
+});
+
+//роут по которому достаем резюме из коллекции резюме по привязаному пользователю
+router.get('/getprofileinfo', auth, async (req, res) => {
+  try {
+    const profileinfo = await Profileinfo.find({ owner: req.user.userId });
+    res.status(200).json(profileinfo);
+  } catch (err) {
+    res.status(400).json({ msg: err });
+  }
+});
+
+//роут по которому достаем резюме из коллекции резюме по id пользователя
+router.get('/getprofileinfo/:id', async (req, res) => {
+  try {
+    const profileinfo = await Profileinfo.find({ owner: req.params.id });
+    console.log('resumeByIdData', profileinfo);
+    res.status(200).json(profileinfo);
+  } catch (err) {
+    res.status(400).json({ msg: err });
+  }
+});
+
+//роут по которому обновляем резюме в коллекции резюме по id пользователя
+router.patch('/updateprofileinfo/:id', async (req, res) => {
+  try {
+    console.log('updatedResumeData3');
+    const profileinfo = await Profileinfo.findOneAndUpdate({ owner: req.params.id }, req.body, { new: true });
+    //const profileinfo = await Profileinfo.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!profileinfo) throw Error('Something went wrong while updating the profileinfo');
+    console.log('updatedResumeData', profileinfo);
+    //res.status(200).json({success: true});
+    res.send('Okh');
   } catch (err) {
     res.status(400).json({ msg: err });
   }
