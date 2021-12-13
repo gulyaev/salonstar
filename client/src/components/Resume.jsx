@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from '@material-ui/core/styles';
+import Loader from "./Loader";
 
 const useStyles = makeStyles((theme) => ({
     aboutMe: {
@@ -10,16 +11,21 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const TestResume = (props) => {
+const Resume = (props) => {
     const classes = useStyles();
     const [editMode1, setEditMode1] = useState(false);
     const [editMode2, setEditMode2] = useState(false);
     const [editMode3, setEditMode3] = useState(false);
     const [profileAbout, setProfileAbout] = useState(props.aboutMe);
     const [profilePersonalInfo, setProfilePersonalInfo] = useState(props.personalInfo);
-    const [profileInterests, setProfileInterests] = useState(props.interests);
+    const [profileInterests, setProfileInterests] = useState(props.interests); 
 
-    
+    useEffect (() => {
+        setProfileAbout(props.aboutMe);
+        setProfilePersonalInfo(props.personalInfo);
+        setProfileInterests(props.interests);
+    }, [props.aboutMe, props.personalInfo, props.interests])
+
     const activateEditMode1 = () => {
         setEditMode1(true);
     }
@@ -49,8 +55,7 @@ const TestResume = (props) => {
         props.updateUserResumeData(profileAbout, profilePersonalInfo, profileInterests);
         props.getUserResumeData();
     }
-    
-
+    //debugger;
     return (
         <>
             {
@@ -70,7 +75,7 @@ const TestResume = (props) => {
                                     <span onClick={ activateEditMode1 }>{resumeItem.about}</span>
                                 }
 
-                                <div className={classes.aboutMe}>ПЕРСОНАЛЬНАЯ ИНФОРМАЦИЯ</div>
+                                <div className={classes.aboutMe}>ПЕРСОНАЛЬНАЯ ИНФОРМАЦИЯЯ</div>
                                 {editMode2 &&
                                     <div>
                                         <span class="tiny right material-icons">edit</span>
@@ -101,4 +106,4 @@ const TestResume = (props) => {
     )
 }
 
-export default TestResume;
+export default Resume;

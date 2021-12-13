@@ -6,6 +6,13 @@ import {
     getUsersThunkCreator,
     onPageChangedThunkCreator
 } from '../../redux/users-reducer';
+import {
+    getUsersFromState,
+    getPageSize,
+    getTotalUsersCount,
+    getCurrentPage,
+    getIsFetching
+} from '../../redux/users-selectors';
 import UserItem1 from "../UserItem/UserItem1";
 import Users from "./Users";
 import { connect } from "react-redux";
@@ -40,14 +47,25 @@ function UsersContainer(props) {
     );
 }
 
+/*
 let mapStateToProps = (state) => {
     return {
-        //usersPage: state.usersPage,
         usersData: state.usersPage.usersData,
         pageSize: state.usersPage.pageSize,
         totalUsersCount: state.usersPage.totalUsersCount,
         currentPage: state.usersPage.currentPage,
         isFetching: state.usersPage.isFetching
+    }
+}
+*/
+
+let mapStateToProps = (state) => {
+    return {
+        usersData: getUsersFromState(state),
+        pageSize: getPageSize(state),
+        totalUsersCount: getTotalUsersCount(state),
+        currentPage: getCurrentPage(state),
+        isFetching: getIsFetching(state)
     }
 }
 

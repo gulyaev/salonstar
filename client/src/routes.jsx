@@ -4,15 +4,17 @@ import LinksPage from '../src/pages/LinksPage';
 import CreatePage from '../src/pages/CreatePage';
 import DetailPage from '../src/pages/DetailPage';
 import AuthPageContainer from '../src/pages/AuthPageContainer';
-import ProfileContainer from './pages/Profile/ProfileContainer';
+//import ProfileContainer from './pages/Profile/ProfileContainer';
+//import DialogsContainer from './pages/Dialogs/DialogsContainer';
 import Vacancies from './pages/Vacancies';
 import ResumeContainer from './pages/ResumeContainer';
 import Courses from './pages/Courses';
-import DialogsContainer from './pages/Dialogs/DialogsContainer';
 import UsersContainer from './pages/Users/UsersContainer';
 import TestPage from './pages/Test/TestPage.jsx';
 import MyProfile from './pages/Profile/MyProfile.jsx';
 import Grid from './pages/Grid/Grid.jsx';
+const DialogsContainer = React.lazy(() => import('./pages/Dialogs/DialogsContainer'));
+const ProfileContainer = React.lazy(() => import('./pages/Profile/ProfileContainer'));
 
 export const useRoutes = (isAuthenticated, props) => {
     if (isAuthenticated) {
@@ -27,9 +29,15 @@ export const useRoutes = (isAuthenticated, props) => {
                 <Route path="/detail/:id">
                     <DetailPage />
                 </Route>
-                <Route path="/profile/:userId?"><ProfileContainer state={props.state} dispatch={props.dispatch} /></Route>
+                <Route path="/profile/:userId?">
+                    <React.Suspense fallback={<div>Загрузка...</div>}>
+                        <ProfileContainer state={props.state} dispatch={props.dispatch} />
+                    </React.Suspense>
+                </Route>
                 <Route path="/dialogs">
-                    <DialogsContainer state={props.state} dispatch={props.dispatch} />
+                    <React.Suspense fallback={<div>Загрузка...</div>}>
+                        <DialogsContainer state={props.state} dispatch={props.dispatch} />
+                    </React.Suspense>
                 </Route>
                 <Route path="/vacancies">
                     <Vacancies />

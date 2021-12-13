@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
-import { setUserProfile, updateUserProfile, setUserResumeData } from '../../redux/profile-reducer';
+import { setUserProfile, 
+        updateUserProfile, 
+        setUserResumeData, 
+        getAndSetUserProfileThunkCreator,
+        getAuthorizedUserResumeThunkCreator, 
+        getUserResumeURLThunkCreator,
+        updateUserResumeDataThunkCreator
+    } from '../../redux/profile-reducer';
 import { connect } from "react-redux";
 import { withRouter } from 'react-router-dom';
 import Profile from "./Profile";
@@ -15,12 +22,19 @@ const ProfileContainer = (props) => {
     const auth = useContext(AuthContext);
     const message = useMessage();
     const { loading, request, error, clearError } = useHttp();
-    const [userProfile, setProfile] = useState();
+    const [userProfile, setProfile] = useState(props.profile);
 
     const globalStorage = JSON.parse(localStorage.getItem('userData'));//определен айди и токен когда авторизован
 
     let userId = props.match.params.userId;//определен когда есть id в URI - переход от списка пользователей
     console.log("userIdfromURLProfCont " + userId); //определен когда есть id в URI - переход от списка пользователей
+
+    const authUserId = globalStorage.userId;//определен айди когда авторизован
+
+    if (!userId) {
+        userId = authUserId; //если нет id из урла, то берем id из локалсторидж
+        console.log("userIdFromLS " + userId);
+    }
 
     useEffect(
         async () => {
@@ -28,34 +42,19 @@ const ProfileContainer = (props) => {
                 return <Loader />
             }
 
-            const authUserId = globalStorage.userId;//определен айди когда авторизован
-
-            if (!userId) {
-                userId = authUserId; //если нет id из урла, то берем id из локалсторидж
-            }
-
             try {
-                console.log("userIdfromProfCont " + userId); //id из URI либо из Локалсторидж
-                const data = await request(`/api/profile/profile/` + userId, 'GET');
-                console.log('userProfileData', data);
-                props.setUserProfile(data);
-                setProfile(data);
-                console.log('userProfileDataUseState', userProfile);
+                props.getAndSetUserProfileThunkCreator(userId);
             } catch (e) {
 
             }
         }, [request, userId])
 
     let getUserResumeData = async () => {
-        if (!userId) {
+        if (userId === authUserId) {
             try {
-                console.log("userIdfromProfileContainerResumeData " + userId); //id из URI либо из Локалсторидж
-                //получение резюме из БД резюме по авторизованому пользователю
-                const resumeData = await request('/api/profile/getprofileinfo', 'GET', null, {
-                    Authorization: `Bearer ${token}`
-                });
-                console.log('ResumeData', resumeData);
-                props.setUserResumeData(resumeData);
+                console.log("userIdfromProfileContainerResumeDataLS " + userId); //id из Локалсторидж
+                //получениеиз БД резюме по авторизованому пользователю
+                props.getAuthorizedUserResumeThunkCreator(token);
             } catch (e) {
 
             }
@@ -63,31 +62,20 @@ const ProfileContainer = (props) => {
             try {
                 console.log("userIdfromProfileContainerResumeDataFromURL " + userId); //id из URL
                 //получение резюме из БД резюме по id пользователя из URL
-                const resumeData = await request(`/api/profile/getprofileinfo/` + userId, 'GET');
-                console.log('ResumeData', resumeData);
-                props.setUserResumeData(resumeData);
+                props.getUserResumeURLThunkCreator(userId);
             } catch (e) {
 
             }
         }
     };
 
-    let updateUserResumeData = async (profileAbout = props.resume[0].about, profilePersonalInfo = props.resume[0].personalinfo, profileInterests = props.resume[0].interests) => {
-        if (!userId) {
+    //let updateUserResumeData = async (userId, props.resume[0].about, props.resume[0].personalinfo, props.resume[0].interests) => {
+    let updateUserResumeData = async (profileAbout, profilePersonalInfo, profileInterests) => {
+        if (userId === authUserId) {
             try {
                 console.log("userIdfromProfileContainerResumeData " + userId); //id из Локалсторидж
                 //получение резюме из БД резюме по авторизованому пользователю
-                const resumeData = await request(`/api/profile/updateprofileinfo/` + userId, 'PATCH',
-                    {
-                        "about": profileAbout,
-                        "personalinfo": profilePersonalInfo,
-                        "interests": profileInterests
-                    },
-                    {
-                        'Content-Type': 'application/json'
-                    });
-                console.log('UpdatedResumeData', resumeData);
-                props.setUserResumeData(resumeData);
+                props.updateUserResumeDataThunkCreator(userId, profileAbout, profilePersonalInfo, profileInterests)
             } catch (e) {
 
             }
@@ -95,17 +83,7 @@ const ProfileContainer = (props) => {
             try {
                 console.log("userIdfromProfileContainerResumeDataFromURL " + userId); //id из URL
                 //получение резюме из БД резюме по id пользователя из URL
-                const resumeData = await request(`/api/profile/updateprofileinfo/` + userId, 'PATCH', 
-                {
-                    "about": profileAbout,
-                    "personalinfo": profilePersonalInfo,
-                    "interests": profileInterests
-                },
-                {
-                    'Content-Type': 'application/json'
-                });
-                console.log('UpdatedResumeData', resumeData);
-                props.setUserResumeData(resumeData);
+                props.updateUserResumeDataThunkCreator(userId, profileAbout, profilePersonalInfo, profileInterests)
             } catch (e) {
 
             }
@@ -144,7 +122,7 @@ const ProfileContainer = (props) => {
             });
     }
 
-
+    console.log("Render Profile");
     return (
         <>
             {
@@ -166,13 +144,25 @@ const ProfileContainer = (props) => {
     )
 }
 
-let mapStateToProps = (state) => ({
-    profile: state.profilePage.profile,
-    resume: state.profilePage.resume
-});
+let mapStateToProps = (state) => {
+    console.log("mstp PROFILE");
+    return {
+        profile: state.profilePage.profile,
+        resume: state.profilePage.resume
+    }
+};
 
 export default compose(
-    connect(mapStateToProps, { setUserProfile, updateUserProfile, setUserResumeData }),
+    connect(mapStateToProps, 
+        { 
+            setUserProfile, 
+            updateUserProfile, 
+            setUserResumeData, 
+            getAndSetUserProfileThunkCreator, 
+            getAuthorizedUserResumeThunkCreator,
+            getUserResumeURLThunkCreator,
+            updateUserResumeDataThunkCreator
+        }),
     withRouter,
     withAuthRedirect
 )(ProfileContainer);

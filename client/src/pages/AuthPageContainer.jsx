@@ -1,6 +1,8 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import {
-    setAuthUserData
+    setAuthUserData,
+    setAuthUserDataThunkCreator,
+    setAuthUserDataLoginThunkCreator
 } from '../redux/auth-reducer';
 import { connect } from "react-redux";
 import { useState, useEffect } from 'react';
@@ -9,7 +11,7 @@ import { useMessage } from '../hooks/message.hook';
 import { AuthContext } from '../context/AuthContext';
 import AuthPage from "./AuthPage";
 
-function AuthPageContainer (props) {
+function AuthPageContainer(props) {
     const auth = useContext(AuthContext);
     const message = useMessage();
     const { loading, request, error, clearError } = useHttp();
@@ -36,37 +38,26 @@ function AuthPageContainer (props) {
 
     const registerHandler = async () => {
         try {
-            const data = await request('/api/auth/register', 'POST', { ...form });
-            console.log('RegisterData', data);
-            message(data.message);
-            console.log('токен' + data.token + 'айди' + data.userId + 'майл' + data.userEmail + 'логин' + data.userLogin + ' админ' + data.currentUser + ' авторизован' + data.isAuth)
-            auth.login(data.token, data.userId, data.userEmail, data.userLogin);
-            //console.log('auth.userEmail', auth.userEmail);
+            props.setAuthUserDataThunkCreator(request, { ...form }, message, auth);
             //setAuthUserData(data.userId, data.userEmail, data.userLogin, data.currentUser, data.isAuth);
         } catch (e) {
-            
+
         }
     }
 
     const loginHandler = async () => {
-            try {
-                const data = await request('/api/auth/login', 'POST', { ...form });
-                console.log('LoginData', data);
-                message(data.message);
-                auth.login(data.token, data.userId, data.userEmail, data.userLogin);
-                //setAuthUserData(data.userId, data.email, data.login)
-            } catch (e) {
+        try {
+            props.setAuthUserDataLoginThunkCreator(request, { ...form }, message, auth);
+            //setAuthUserData(data.userId, data.email, data.login)
+        } catch (e) {
 
-            }
+        }
     }
 
     const pressHandler = async (event) => {
         if (event.key === 'Enter') {
             try {
-                const data = await request('/api/auth/login', 'POST', { ...form });
-                console.log('Data', data);
-                message(data.message);
-                auth.login(data.token, data.userId)
+                props.setAuthUserDataLoginThunkCreator(request, { ...form }, message, auth);
             } catch (e) {
 
             }
@@ -74,7 +65,7 @@ function AuthPageContainer (props) {
     }
 
     return (
-        <AuthPage changeHandler={changeHandler} registerHandler={registerHandler} loginHandler={loginHandler} pressHandler={pressHandler} 
+        <AuthPage changeHandler={changeHandler} registerHandler={registerHandler} loginHandler={loginHandler} pressHandler={pressHandler}
             form={form} loading={loading}
         />
     );
@@ -88,4 +79,4 @@ let mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, { setAuthUserData })(AuthPageContainer);
+export default connect(mapStateToProps, { setAuthUserData, setAuthUserDataThunkCreator, setAuthUserDataLoginThunkCreator })(AuthPageContainer);

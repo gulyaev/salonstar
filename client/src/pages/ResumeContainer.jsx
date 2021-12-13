@@ -1,4 +1,8 @@
 import React, { useContext } from 'react';
+import {
+    postResumeThunkCreator
+} from '../redux/profile-reducer';
+import { connect } from "react-redux";
 import { useState, useEffect } from 'react';
 import { useHttp } from '../hooks/http.hook';
 import { useMessage } from '../hooks/message.hook';
@@ -34,14 +38,7 @@ function ResumeContainer(props) {
     const postResumeHandler = async () => {
         const authToken = globalStorage.token;
         try {
-            const data = await request('/api/profile/generateprofileinfo', 'POST', { ...resumeForm }, 
-            {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + authToken
-            },
-            );
-            console.log('ResumeData', data);
-            message(data.message);
+            props.postResumeThunkCreator(request, { ...resumeForm }, authToken, message);
         } catch (e) {
 
         }
@@ -57,4 +54,4 @@ function ResumeContainer(props) {
     );
 }
 
-export default ResumeContainer;
+export default connect(null, { postResumeThunkCreator })(ResumeContainer);

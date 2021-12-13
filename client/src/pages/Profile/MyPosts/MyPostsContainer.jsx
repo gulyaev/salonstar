@@ -1,4 +1,8 @@
-import { addPostActionCreator, onPostChangeActionCreator } from '../../../redux/profile-reducer';
+import {addPostActionCreator, 
+		onPostChangeActionCreator,
+		//addPostThunkCreator,
+		//onPostChangeThunkCreator
+} from '../../../redux/profile-reducer';
 import MyPosts from './MyPosts';
 import {connect} from "react-redux";
 
@@ -14,9 +18,14 @@ let mapDispatchToProps = (dispatch) => {
 	return {
 		addPost: ()=>{dispatch(addPostActionCreator());},
 		onPostChange: (text)=>{dispatch(onPostChangeActionCreator(text));}
+
+		//addPost: ()=>{addPostThunkCreator()},
+		//onPostChange: (text)=>{onPostChangeThunkCreator(text)}
 	}
 }
 
-const MyPostsContainer = connect(mapStateToProps, mapDispatchToProps)(MyPosts);
+
+//const MyPostsContainer = connect(mapStateToProps, mapDispatchToProps)(MyPosts);
+const MyPostsContainer = connect(mapStateToProps, mapDispatchToProps )(MyPosts);
 
 export default MyPostsContainer;

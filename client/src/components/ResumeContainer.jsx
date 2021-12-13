@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import Resume from "./Resume"
 
 const ResumeContainer = (props) => {
+    //debugger;
     return (
         <Resume resume={props.resume} updateUserResumeData={props.updateUserResumeData} getUserResumeData={props.getUserResumeData}
         />
